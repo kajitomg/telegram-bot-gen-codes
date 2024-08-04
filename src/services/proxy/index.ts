@@ -3,18 +3,9 @@ import { getRandomNumber } from '../../helpers/get-random-number';
 import { Services } from '../index';
 const HttpProxyAgent = require('https-proxy-agent');
 
-const proxys = [
-  '45.89.19.15:11644',
-  '45.89.18.244:16126',
-  '45.89.19.25:12838',
-  '45.89.19.32:7766',
-  '45.89.18.249:12476',
-  '45.89.19.76:16820',
-  '45.89.18.247:5936',
-  '45.89.19.13:17800',
-  '45.89.19.53:9324',
-  '45.89.18.247:5926',
-]
+import * as data from './servers.json';
+
+const proxys = data?.proxys
 
 class ProxyService {
   
