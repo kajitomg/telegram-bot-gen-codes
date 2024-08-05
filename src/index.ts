@@ -36,38 +36,39 @@ const run = () => {
 const pendingRequests = {};
 
 const callbackQuery = async (callbackQuery) => {
-  const msg = callbackQuery.message;
-  const chatId = msg.chat.id
-  
-  await bot.deleteMessage(chatId,msg.message_id)
-  
-  await bot.answerCallbackQuery(callbackQuery.id);
-  
-  const { data = "" } = callbackQuery;
-  
-  if(msg.text === 'Выбери количество генерируемых кодов') {
-    if ( pendingRequests[chatId] ) {
-      return await bot.sendMessage(chatId, `У вас уже есть 1 активный запрос, дождитесь его окончания!`,{})
+  try {
+    const msg = callbackQuery.message;
+    const chatId = msg.chat.id
+    
+    await bot.deleteMessage(chatId,msg.message_id)
+    
+    await bot.answerCallbackQuery(callbackQuery.id);
+    
+    const { data = "" } = callbackQuery;
+    
+    if(msg.text === 'Выбери количество генерируемых кодов') {
+      if ( pendingRequests[chatId] ) {
+        return await bot.sendMessage(chatId, `У вас уже есть 1 активный запрос, дождитесь его окончания!`,{})
+      }
+      const progress = 0
+      const message = await bot.sendMessage(chatId, `Идет генерация кодов... ${progress}%`,{})
+      pendingRequests[chatId] = true
+      const keys = await generateKeys(data,  bot, chatId, message.message_id, progress, msg.chat.username)
+      await bot.deleteMessage(chatId,message.message_id)
+      await bot.sendMessage(chatId,
+        'Коды успешно сгенерированы \\(нажмите, чтобы скопировать\\)\\:' +
+        '\n\n`' +
+        `${keys.filter(key => key).join('`\n\n`')?.toString()}` +
+        '`\n\n' +
+        'Подписывайся на наш канал \\- [Хомячий Табор](https://t.me/+lZLomxu29j81NGQy)',
+        { parse_mode: 'MarkdownV2'}
+      )
+      delete pendingRequests[chatId]
     }
-    const progress = 0
-    const message = await bot.sendMessage(chatId, `Идет генерация кодов... ${progress}%`,{})
-    pendingRequests[chatId] = true
-    const keys = await generateKeys(data,  bot, chatId, message.message_id, progress)
-    await bot.deleteMessage(chatId,message.message_id)
-    await bot.sendMessage(chatId, `Коды успешно сгенерированы (нажмите, чтобы скопировать):`,{})
-    await bot.sendMessage(chatId, '`' + `${keys.filter(key => key).join('`\n\n`')?.toString()}  ` + '`', {
-      parse_mode: 'MarkdownV2',
-      disable_notification: true
-    })
-    delete pendingRequests[chatId]
-    /*keys.map(async (key) => {
-      // @ts-ignore
-      key?.toString() && await bot.sendMessage(chatId, '`' + `${key?.toString()}` + '`', {
-        parse_mode: 'MarkdownV2',
-        disable_notification: true
-      })
-    })*/
+  } catch (e) {
+    console.log(e)
   }
+
 };
 
 // После инициализации бота, задать обработчик
@@ -78,8 +79,8 @@ bot.on('text', async msg => {
   const text = msg.text
   
   if (text === '/start') {
-    const message = await bot.sendMessage(chatId, `Для генерации кодов введите команду /genkeys`,{parse_mode: 'MarkdownV2'})
-  } else if (text === '/genkeys') {
+    const message = await bot.sendMessage(chatId, `Для генерации кодов введите команду /gencodes`,{parse_mode: 'MarkdownV2'})
+  } else if (text === '/gencodes') {
     const message = await bot.sendMessage(chatId, `Выбери количество генерируемых кодов`,{
       reply_markup: {
         inline_keyboard: [
@@ -91,7 +92,7 @@ bot.on('text', async msg => {
     
   }
   else {
-    await bot.sendMessage(chatId, 'Неизвестная команда',{})
+    await bot.sendMessage(chatId, 'Неизвестная команда, для генерации кодов введите команду /gencodes',{})
   }
 })
 

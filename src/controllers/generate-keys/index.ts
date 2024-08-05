@@ -9,8 +9,8 @@ const EVENTS_DELAY = 20000
 const MAX_AMOUNT_ITTERATIONS = 8
 const PENDING_AMOUNT_ITTERATIONS = 4
 
-export default async function generateKeys (keyCount:number = 1, bot, chatId:number, messageId:number, progress:number ): Promise<Awaited<string | void>[]> {
-  console.log('generated start ' + new Date())
+export default async function generateKeys (keyCount:number = 1, bot, chatId:number, messageId:number, progress:number, username:string): Promise<Awaited<string | void>[]> {
+  console.log(`generation for ${username} has been started ` + new Date())
   
   async function generateKeyProcess() {
     const clientId = generateClientId();
@@ -20,7 +20,7 @@ export default async function generateKeys (keyCount:number = 1, bot, chatId:num
     try {
       clientToken = await generateKeysReducers.login(clientId, services);
     } catch (error) {
-      console.log('Ошибка при авторизации');
+      console.log(`Ошибка при авторизации для ${username}`)
       return null;
     }
     
@@ -37,7 +37,7 @@ export default async function generateKeys (keyCount:number = 1, bot, chatId:num
           break;
         }
       } catch (error) {
-        console.log('Ошибка при регистрации события');
+        console.log(`Ошибка при регистрации события для ${username}`)
         return null;
       }
     }
@@ -46,13 +46,13 @@ export default async function generateKeys (keyCount:number = 1, bot, chatId:num
       const key = await generateKeysReducers.generateKey(clientToken, services);
       return key;
     } catch (error) {
-      console.log('Ошибка при генерации ключа');
+      console.log(`Ошибка при генерации ключа для ${username}`)
       return null;
     }
   }
   
   
   const keys = await Promise.all(Array.from({ length: keyCount }, generateKeyProcess));
-  console.log('generated finish ' + new Date())
+  console.log(`generation for ${username} has been finish ` + new Date())
   return keys
 };
