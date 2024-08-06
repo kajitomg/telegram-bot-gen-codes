@@ -116,16 +116,15 @@ bot.on('text', async msg => {
           console.log(err);
           console.log('Произошла ошибка при поиске пользователя');
         } else {
-          if (!rows) {
+          if (!rows[0]) {
             await db.userDB.createUser({
               chat_id:chatId,
-              user_id:msg.chat.user_id,
-              username:msg.chat.username,
+              user_id:msg.chat.username,
+              username:msg.chat.first_name,
             }, async (err, rows) => {
               if(err) {
                 console.log('Произошла ошибка при создании пользователя')
               } else {
-                console.log(rows)
                 const message = await bot.sendMessage(chatId, `Cпасибо за использование нашего бота\\!\n\nДля генерации кодов введите команду /gencodes`, { parse_mode: 'MarkdownV2' })
               }
             })
@@ -139,6 +138,24 @@ bot.on('text', async msg => {
     }
   } else if (text === '/gencodes') {
     try {
+      await db.userDB.readUserBy({chat_id: chatId}, async (err, rows) => {
+        if (err) {
+          console.log(err);
+          console.log('Произошла ошибка при поиске пользователя');
+        } else {
+          if (!rows[0]) {
+            await db.userDB.createUser({
+              chat_id:chatId,
+              user_id:msg.chat.username,
+              username:msg.chat.first_name,
+            }, async (err, rows) => {
+              if(err) {
+                console.log('Произошла ошибка при создании пользователя')
+              }
+            })
+          }
+        }
+      })
       const message = await bot.sendMessage(chatId, `Выберите игру:`,{
         reply_markup: {
           inline_keyboard: [

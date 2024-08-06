@@ -9,6 +9,9 @@ module.exports = {
     filename: 'bundle.js',
     clean:true
   },
+  externals: {
+    sqlite3: 'commonjs sqlite3'
+  },
   resolve: {
     extensions: ['.ts', '.js']
   },

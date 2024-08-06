@@ -1,3 +1,4 @@
+require('dotenv').config()
 import { generateClientId } from '../../helpers/generate-client-id';
 import { getRandomDelay } from '../../helpers/get-random-delay';
 import { sleep } from '../../helpers/sleep';
