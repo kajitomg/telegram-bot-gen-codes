@@ -168,6 +168,26 @@ bot.on('text', async msg => {
       console.log(msg.chat.username + ' ' + error.response?.body?.error_code + ' ' + error.response?.body?.description)
     }
     
+  } else if (text === '/postnewssecure') {
+    try {
+      if(chatId === 806145885) {
+        await db.userDB.readDistinctUsers(async (err, rows) => {
+          if (err) {
+            console.log(err);
+            console.log('Произошла ошибка при поиске пользователя');
+          } else {
+            rows.map(async (row) => {
+              const message = await bot.sendMessage(rows.chat_id, `
+              Новости о AIRDROP от официального канала Hamster Kombat\n\nТолько что в официальном канале Hamster Kombat появился пост о скором Airdrop\n\n*[Подробности можете узнать в нашем канале](https://t.me/hamtabor/321)*
+            `, { parse_mode: 'MarkdownV2' })
+            })
+          }
+        })
+      }
+    } catch (error) {
+      console.log(msg.chat.username + ' ' + error.response?.body?.error_code + ' ' + error.response?.body?.description)
+    }
+    
   }
   else {
     try {

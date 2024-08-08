@@ -19,6 +19,13 @@ const readUsers = async (callback) => {
   await db.all(sql, [],  callback);
 }
 
+//READ_ALL_DISTINCT
+
+const readDistinctUsers = async (callback) => {
+  const sql = 'SELECT DISTINCT chat_id FROM items';
+  return await db.all(sql, [],  callback);
+}
+
 //READ_ONE_BY
 
 const readUserBy = async (selectors: { id?:number, chat_id?:string, user_id?:string, username?:string }, callback) => {
@@ -52,6 +59,7 @@ export default {
   createUser,
   readUsers,
   readUserBy,
+  readDistinctUsers,
   updateUserById,
   deleteUserById,
 }
