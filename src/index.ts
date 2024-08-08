@@ -177,12 +177,17 @@ bot.on('text', async msg => {
             console.log('Произошла ошибка при поиске пользователя');
           } else {
             rows.map(async (row) => {
-              const message = await bot.sendMessage(rows.chat_id, `
-              Новости о AIRDROP от официального канала Hamster Kombat\n\nТолько что в официальном канале Hamster Kombat появился пост о скором Airdrop\n\n*[Подробности можете узнать в нашем канале](https://t.me/hamtabor/321)*
-            `, { parse_mode: 'MarkdownV2' })
+              if(row.chat_id !== '7028984087.0') {
+                const message = await bot.sendMessage(row.chat_id, `
+                  Новости о AIRDROP от официального канала Hamster Kombat\n\nТолько что в официальном канале Hamster Kombat появился пост о скором Airdrop\n\n*[Подробности можете узнать в нашем канале](https://t.me/hamtabor/321)*
+                `, { parse_mode: 'MarkdownV2' })
+              }
             })
           }
         })
+      } else {
+        await bot.sendMessage(chatId, 'Неизвестная команда, для генерации кодов введите команду /gencodes',{})
+        
       }
     } catch (error) {
       console.log(msg.chat.username + ' ' + error.response?.body?.error_code + ' ' + error.response?.body?.description)
