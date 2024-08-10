@@ -37,7 +37,7 @@ export default async function generateKeys (keyCount:number = 1, bot, chatId:num
         await sleep(+EVENTS_DELAY * getRandomDelay());
         progress += progress >= 100 ? 100 : (100 / (+PENDING_AMOUNT_ITTERATIONS + 1)) / keyCount
         
-        await bot.editMessageText(`Идет генерация кодов... ${progress}%`,{chat_id:chatId,message_id:messageId})
+        await bot.editMessageText(`Идет генерация кодов... ${Math.round(progress)}%`,{chat_id:chatId,message_id:messageId})
       } catch (error) {
         console.log(username + ' ' + error.response?.body?.error_code + ' ' + error.response?.body?.description)
       }
