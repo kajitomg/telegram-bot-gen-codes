@@ -1,3 +1,3 @@
 export function getRandomDelay() {
-  return Math.random() / 3 + 1;
+  return Math.random() / 10 + 1;
 }

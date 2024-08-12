@@ -6,7 +6,7 @@ import { textDefaultRoutes } from './default/text';
 export const textRoutes = (bot) => async (msg) => {
   const defaultRoutes = await textDefaultRoutes(msg, bot)
   const codesRoutes = await textCodesRoutes(msg, bot)
-  
+    
   switch (msg.text) {
     case '/start': {
       await defaultRoutes.start()
@@ -32,16 +32,17 @@ export const callbackQueryRoutes = (bot) => async (callbackQuery:TelegramBot.Cal
     
     await bot.answerCallbackQuery(callbackQuery.id);
   } catch (error) {
+    console.log(error)
     console.log(msg.chat.username + ' ' + error.response?.body?.error_code + ' ' + error.response?.body?.description)
   }
-  
+    
   switch (msg.text) {
     case 'Выберите игру:': {
-      await codesRoutes.setGame()
+      await codesRoutes.setGenCount()
       break;
     }
     case 'Выберите количество генерируемых кодов:': {
-      await codesRoutes.setGenCount()
+      await codesRoutes.generateCodes()
       break;
     }
   }

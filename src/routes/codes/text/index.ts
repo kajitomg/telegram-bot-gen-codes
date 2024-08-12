@@ -14,12 +14,7 @@ export const textCodesRoutes = async (msg:TelegramBot.Message, bot: TelegramBot)
             successCallback: async (row) => {
               if (!row) {
                 await UsersSlices.createUser(
-                  { userId: msg.chat.username, chatId, username: msg.chat.first_name },
-                  {
-                    successCallback: async () => {
-                      await bot.sendMessage(chatId, `Cпасибо за использование нашего бота\\!\n\nДля генерации кодов введите команду /gencodes`, { parse_mode: 'MarkdownV2' })
-                    }
-                  })
+                  { userId: msg.chat.username, chatId, username: msg.chat.first_name })
               }
             }
           })
@@ -28,6 +23,7 @@ export const textCodesRoutes = async (msg:TelegramBot.Message, bot: TelegramBot)
             inline_keyboard: [
               [{text: games[0].name, callback_data: '0'},{text: games[1].name, callback_data: '1'}],
               [{text: games[2].name, callback_data: '2'},{text: games[3].name, callback_data: '3'}],
+              [{text: games[4].name, callback_data: '4'}],
             ],
           },
         })

@@ -11,16 +11,20 @@ export class UsersSlices {
       errorCallback
     }:{ successCallback?:(row) => Promise<void>, errorCallback?:(err) => Promise<void> }
   ) {
-    await db.userDB.readUserBy({chat_id: chatId}, async (err, row) => {
-      if (err) {
-        console.log(err);
-        console.log('Произошла ошибка при поиске пользователя');
-        await errorCallback(err)
-        return null
-      } else {
-        await successCallback(row)
-      }
-    })
+    try {
+      await db.userDB.readUserBy({chat_id: chatId}, async (err, row) => {
+        if (err) {
+          console.log(err);
+          console.log('Произошла ошибка при поиске пользователя');
+          await errorCallback(err)
+          return null
+        } else {
+          await successCallback(row)
+        }
+      })
+    } catch (e) {
+      console.log(e)
+    }
   }
   
   static createUser = async function(
@@ -32,19 +36,23 @@ export class UsersSlices {
     {
       successCallback,
       errorCallback
-    }:{ successCallback?:(row) => Promise<void>, errorCallback?:(err) => Promise<void> }
+    }: { successCallback?:(row) => Promise<void>, errorCallback?:(err) => Promise<void> } = {}
   ) {
-    await db.userDB.createUser({
-      chat_id:chatId,
-      user_id:userId,
-      username:username,
-    }, async (err, row) => {
-      if(err) {
-        console.log('Произошла ошибка при создании пользователя')
-        await errorCallback(err)
-      } else {
-        await successCallback(row)
-      }
-    })
+    try {
+      await db.userDB.createUser({
+        chat_id:chatId,
+        user_id:userId,
+        username:username,
+      }, async (err, row) => {
+        if(err) {
+          console.log('Произошла ошибка при создании пользователя')
+          await errorCallback(err)
+        } else {
+          await successCallback(row)
+        }
+      })
+    } catch (e) {
+      console.log(e)
+    }
   }
 }

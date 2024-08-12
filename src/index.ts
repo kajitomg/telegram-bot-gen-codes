@@ -36,7 +36,8 @@ export const games = [
   { id:'bike', name: "Riding Extreme 3D" },
   { id:'cube', name: "Chain Cube" },
   { id:'clone', name: "My Clone Army" },
-  { id:'miner', name: "Train Miner" }
+  { id:'miner', name: "Train Miner" },
+  { id:'all', name: "Все игры" }
 ]
 
 bot.on("callback_query", callbackQueryRoutes(bot));

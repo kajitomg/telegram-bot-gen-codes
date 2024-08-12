@@ -12,7 +12,7 @@ export const games= {
   miner:{ name: "miner", appToken: process.env.APP_TOKEN_MINER, promoId: process.env.PROMO_ID_MINER, delay:process.env.EVENTS_DELAY_MINER,maxAmount:process.env.MAX_AMOUNT_ITTERATIONS_MINER,pendingAmount:process.env.PENDING_AMOUNT_ITTERATIONS_MINER }
 }
 
-export default async function generateKeys (keyCount:number = 1, bot, chatId:number, messageId:number, progress:number, username:string, game:'bike'|'cube'|'clone'|'miner'): Promise<Awaited<string | void>[]> {
+export default async function generateKeys (keyCount:number = 1, bot, chatId:number, messageId:number, progress:number, username:string, game:'bike'|'cube'|'clone'|'miner', edit:boolean = true): Promise<Awaited<string | void>[]> {
   const EVENTS_DELAY = games[game].delay
   
   const MAX_AMOUNT_ITTERATIONS = games[game].maxAmount
@@ -37,7 +37,7 @@ export default async function generateKeys (keyCount:number = 1, bot, chatId:num
         await sleep(+EVENTS_DELAY * getRandomDelay());
         progress += progress >= 100 ? 100 : (100 / (+PENDING_AMOUNT_ITTERATIONS + 1)) / keyCount
         
-        await bot.editMessageText(`Идет генерация кодов... ${Math.round(progress)}%`,{chat_id:chatId,message_id:messageId})
+        edit && await bot.editMessageText(`Идет генерация кодов... ${Math.round(progress)}%`,{chat_id:chatId,message_id:messageId})
       } catch (error) {
         console.log(username + ' ' + error.response?.body?.error_code + ' ' + error.response?.body?.description)
       }
