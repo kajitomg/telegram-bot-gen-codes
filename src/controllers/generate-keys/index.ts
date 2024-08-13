@@ -44,7 +44,6 @@ export default async function generateKeys (keyCount:number = 1, bot, chatId:num
       
       try {
         const hasCode = await generateKeysReducers.registerEvent(clientToken, game, services);
-        
         if (hasCode) {
           break;
         }
