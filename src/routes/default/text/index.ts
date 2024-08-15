@@ -38,9 +38,9 @@ export const textDefaultRoutes = async (msg:TelegramBot.Message, bot: TelegramBo
               console.log('Произошла ошибка при поиске пользователя');
             } else {
               try {
-                rows.map(async (row) => {
+                rows.map((row) => {
                   try {
-                    const message = await bot.sendMessage(row.chat_id, `
+                    const message = bot.sendMessage(row.chat_id, `
               Обновление бота\\!\n\n*[Подробности можете узнать в нашем канале](https://t.me/hamtabor/356)*
             `, { parse_mode: 'MarkdownV2' })
                   } catch (error) {

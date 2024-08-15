@@ -16,10 +16,10 @@ export class UsersSlices {
         if (err) {
           console.log(err);
           console.log('Произошла ошибка при поиске пользователя');
-          await errorCallback(err)
+          errorCallback && await errorCallback(err)
           return null
         } else {
-          await successCallback(row)
+          successCallback && await successCallback(row)
         }
       })
     } catch (e) {
@@ -46,9 +46,9 @@ export class UsersSlices {
       }, async (err, row) => {
         if(err) {
           console.log('Произошла ошибка при создании пользователя')
-          await errorCallback(err)
+          errorCallback && await errorCallback(err)
         } else {
-          await successCallback(row)
+          successCallback && await successCallback(row)
         }
       })
     } catch (e) {
