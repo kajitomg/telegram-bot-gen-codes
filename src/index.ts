@@ -2,16 +2,16 @@ require('dotenv').config()
 import express from 'express'
 import cors from 'cors'
 import config from './config';
-import { callbackQueryRoutes, textRoutes } from './routes';
+import generateKeys from './controllers/generate-keys';
+import handlers from './handlers';
+import send from './helpers/send';
 import { Services } from './services';
+import { Telegraf, Markup } from 'telegraf';
+import { UsersSlices } from './slices/users';
 
 export const services = new Services(config)
 
-import TelegramBot from 'node-telegram-bot-api';
-
-export const bot = new TelegramBot(process.env.API_KEY_BOT, {
-  polling: true
-});
+export const bot = new Telegraf(process.env.API_KEY_BOT );
 
 const app = express()
 
@@ -23,9 +23,11 @@ app.use(express.json())
 
 const PORT = +(process.env.PORT || 5000)
 
-const run = () => {
+const run = async () => {
   try {
-    app.listen(PORT, () => console.log(`Server has been started on ${PORT} port`))
+    await app.listen(PORT, () => console.log(`Server has been started on ${PORT} port`))
+    await bot.launch()
+    
   }
   catch (e) {
     console.log(e)
@@ -40,8 +42,18 @@ export const games = [
   { id:'all', name: "Все игры" }
 ]
 
-bot.on("callback_query", callbackQueryRoutes(bot));
+bot.start(handlers.base.start)
 
-bot.on('text', textRoutes(bot))
+bot.command('gencodes', handlers.keys.selectGenerateGame)
+
+bot.action(/^select::generate::game(?:::(\w+))$/, handlers.keys.selectGenerateCount);
+
+bot.action(/^select::generate::count(?:::(\w+))$/, handlers.keys.generate);
+
+bot.command('projects', handlers.projects.selectProject)
+
+bot.action(/^select::project(?:::(\w+))$/, handlers.projects.getProjectServices);
+
+
 
 run()
