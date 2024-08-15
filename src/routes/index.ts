@@ -16,6 +16,10 @@ export const textRoutes = (bot) => async (msg) => {
       await codesRoutes.gencodes()
       break;
     }
+    case '/startpostnewssecure': {
+      await defaultRoutes.startpostnewssecure()
+      break;
+    }
     default: {
       await defaultRoutes.default()
     }

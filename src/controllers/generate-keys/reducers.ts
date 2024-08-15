@@ -2,7 +2,7 @@ import { Services } from '../../services';
 import { games } from './index';
 
 export default {
-  login: async function(clientId, game:'bike'|'cube'|'clone'|'miner', services: Services) {
+  login: async function(clientId, game:'bike'|'cube'|'clone'|'miner'|'merge', services: Services) {
     try {
       const agent = services.proxy.genProxyAgent()
       const response = await services.api.request<{clientToken: string}>({
@@ -18,7 +18,7 @@ export default {
     }
   },
   
-  registerEvent: async function(clientToken, game:'bike'|'cube'|'clone'|'miner', services: Services) {
+  registerEvent: async function(clientToken, game:'bike'|'cube'|'clone'|'miner'|'merge', services: Services) {
     try {
       const agent = services.proxy.genProxyAgent()
       const response = await services.api.request<{hasCode: boolean}>({
@@ -41,7 +41,7 @@ export default {
     }
   },
   
-  generateKey: async function(clientToken, game:'bike'|'cube'|'clone'|'miner', services: Services) {
+  generateKey: async function(clientToken, game:'bike'|'cube'|'clone'|'miner'|'merge', services: Services) {
     try {
       const response = await services.api.request<{promoCode: string}>({
         url: '/promo/create-code',

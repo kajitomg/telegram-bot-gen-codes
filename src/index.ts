@@ -37,6 +37,7 @@ export const games = [
   { id:'cube', name: "Chain Cube" },
   { id:'clone', name: "My Clone Army" },
   { id:'miner', name: "Train Miner" },
+  { id:'merge', name: "Merge Away" },
   { id:'all', name: "Все игры" }
 ]
 

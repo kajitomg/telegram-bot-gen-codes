@@ -43,10 +43,10 @@ export const callbackQueryCodesRoutes = async (callbackQuery:TelegramBot.Callbac
         let keys = []
         let codes = ''
         if( pendingRequests[chatId].variant === 'all' ) {
-          keys = await Promise.all(Array.from({ length: +data }, async (empty, i) => {
+          const length = games.length - 1
+          keys = await Promise.all(Array.from({ length: length }, async (empty, i) => {
             //@ts-ignore
-            const keys = await generateKeys(+data,  bot, chatId, message.message_id, progress, msg.chat.username, games[i].id, i === 3)
-            
+            const keys = await generateKeys(+data,  bot, chatId, message.message_id, progress, msg.chat.username, games[i].id, i === 0)
             return `*${games[i].name}*` + '\n\n`' + keys.filter(key => key).join('`\n\n`')?.toString() + '`'
           }));
           codes = '\n\n' + keys.filter(key => key).join('\n\n')?.toString()  + '\n\n'

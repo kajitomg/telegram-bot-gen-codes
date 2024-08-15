@@ -12,7 +12,7 @@ export const textCodesRoutes = async (msg:TelegramBot.Message, bot: TelegramBot)
           chatId,
           {
             successCallback: async (row) => {
-              if (!row) {
+              if (row.length === 0) {
                 await UsersSlices.createUser(
                   { userId: msg.chat.username, chatId, username: msg.chat.first_name })
               }
@@ -24,6 +24,7 @@ export const textCodesRoutes = async (msg:TelegramBot.Message, bot: TelegramBot)
               [{text: games[0].name, callback_data: '0'},{text: games[1].name, callback_data: '1'}],
               [{text: games[2].name, callback_data: '2'},{text: games[3].name, callback_data: '3'}],
               [{text: games[4].name, callback_data: '4'}],
+              [{text: games[5].name, callback_data: '5'}],
             ],
           },
         })
