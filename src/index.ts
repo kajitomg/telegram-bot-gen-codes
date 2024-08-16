@@ -38,6 +38,7 @@ export const games = [
   { id:'clone', name: "My Clone Army" },
   { id:'miner', name: "Train Miner" },
   { id:'merge', name: "Merge Away" },
+  { id:'twerk', name: "Twerk Race 3D" },
   { id:'all', name: "Все игры" }
 ]
 

@@ -10,10 +10,12 @@ export const games= {
   cube:{ name: "cube", appToken: process.env.APP_TOKEN_CUBE, promoId: process.env.PROMO_ID_CUBE, delay:process.env.EVENTS_DELAY_CUBE,maxAmount:process.env.MAX_AMOUNT_ITTERATIONS_CUBE,pendingAmount:process.env.PENDING_AMOUNT_ITTERATIONS_CUBE },
   clone:{ name: "clone", appToken: process.env.APP_TOKEN_CLONE, promoId: process.env.PROMO_ID_CLONE, delay:process.env.EVENTS_DELAY_CLONE,maxAmount:process.env.MAX_AMOUNT_ITTERATIONS_CLONE,pendingAmount:process.env.PENDING_AMOUNT_ITTERATIONS_CLONE },
   miner:{ name: "miner", appToken: process.env.APP_TOKEN_MINER, promoId: process.env.PROMO_ID_MINER, delay:process.env.EVENTS_DELAY_MINER,maxAmount:process.env.MAX_AMOUNT_ITTERATIONS_MINER,pendingAmount:process.env.PENDING_AMOUNT_ITTERATIONS_MINER },
-  merge:{ name: "merge", appToken: process.env.APP_TOKEN_MERGE, promoId: process.env.PROMO_ID_MERGE, delay:process.env.EVENTS_DELAY_MERGE,maxAmount:process.env.MAX_AMOUNT_ITTERATIONS_MERGE,pendingAmount:process.env.PENDING_AMOUNT_ITTERATIONS_MERGE }
+  merge:{ name: "merge", appToken: process.env.APP_TOKEN_MERGE, promoId: process.env.PROMO_ID_MERGE, delay:process.env.EVENTS_DELAY_MERGE,maxAmount:process.env.MAX_AMOUNT_ITTERATIONS_MERGE,pendingAmount:process.env.PENDING_AMOUNT_ITTERATIONS_MERGE },
+  twerk:{ name: "twerk", appToken: process.env.APP_TOKEN_TWERK, promoId: process.env.PROMO_ID_TWERK, delay:process.env.EVENTS_DELAY_TWERK,maxAmount:process.env.MAX_AMOUNT_ITTERATIONS_TWERK,pendingAmount:process.env.PENDING_AMOUNT_ITTERATIONS_TWERK }
+  
 }
 
-export default async function generateKeys (keyCount:number = 1, bot, chatId:number, messageId:number, progress:number, username:string, game:'bike'|'cube'|'clone'|'miner'|'merge', edit:boolean = true): Promise<Awaited<string | void>[]> {
+export default async function generateKeys (keyCount:number = 1, bot, chatId:number, messageId:number, progress:number, username:string, game:'bike'|'cube'|'clone'|'miner'|'merge'|'twerk', edit:boolean = true): Promise<Awaited<string | void>[]> {
   const EVENTS_DELAY = games[game].delay
   
   const MAX_AMOUNT_ITTERATIONS = games[game].maxAmount
