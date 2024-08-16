@@ -2,12 +2,11 @@ require('dotenv').config()
 import express from 'express'
 import cors from 'cors'
 import config from './config';
-import generateKeys from './controllers/generate-keys';
 import handlers from './handlers';
-import send from './helpers/send';
+import scenes from './scenes';
 import { Services } from './services';
-import { Telegraf, Markup } from 'telegraf';
-import { UsersSlices } from './slices/users';
+import { Telegraf, Markup, Scenes, session  } from 'telegraf';
+import sender from 'telegraf-sender'
 
 export const services = new Services(config)
 
@@ -41,10 +40,32 @@ export const games = [
   { id:'miner', name: "Train Miner" },
   { id:'all', name: "Все игры" }
 ]
+// @ts-ignore
+const stage = new Scenes.Stage(scenes)
+
+const authUsers = [
+  806145885,
+  1259372103
+]
+
+bot.use(session())
+bot.use(stage.middleware())
+bot.use(sender)
 
 bot.start(handlers.base.start)
 
 bot.command('gencodes', handlers.keys.selectGenerateGame)
+
+// @ts-ignore
+bot.command('broadcast', async ctx => {
+  const admin = authUsers.includes(ctx.chat.id)
+  if(admin) {
+    // @ts-ignore
+    return await ctx.scene.enter('broadcast-start')
+  } else {
+    return await handlers.base.default(ctx)
+  }
+})
 
 bot.action(/^select::generate::game(?:::(\w+))$/, handlers.keys.selectGenerateCount);
 
@@ -53,6 +74,8 @@ bot.action(/^select::generate::count(?:::(\w+))$/, handlers.keys.generate);
 bot.command('projects', handlers.projects.selectProject)
 
 bot.action(/^select::project(?:::(\w+))$/, handlers.projects.getProjectServices);
+
+bot.on('message', handlers.base.default)
 
 
 

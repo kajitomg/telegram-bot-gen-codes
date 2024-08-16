@@ -60,7 +60,7 @@ export default {
         chatId,
         {
           successCallback: async (row) => {
-            if (!row) {
+            if (row.length === 0) {
               await UsersSlices.createUser(
                 { userId: author.username, chatId, username: author.first_name })
             }
