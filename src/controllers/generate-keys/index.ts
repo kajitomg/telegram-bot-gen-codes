@@ -5,19 +5,14 @@ import { getRandomDelay } from '../../helpers/get-random-delay';
 import { sleep } from '../../helpers/sleep';
 import { services } from '../../index';
 import generateKeysReducers from './reducers'
+import { Games, games } from '../../models/game';
 
-export const games= {
-  bike:{ name: "bike", appToken: process.env.APP_TOKEN_BIKE, promoId: process.env.PROMO_ID_BIKE, delay:process.env.EVENTS_DELAY_BIKE,maxAmount:process.env.MAX_AMOUNT_ITTERATIONS_BIKE,pendingAmount:process.env.PENDING_AMOUNT_ITTERATIONS_BIKE },
-  cube:{ name: "cube", appToken: process.env.APP_TOKEN_CUBE, promoId: process.env.PROMO_ID_CUBE, delay:process.env.EVENTS_DELAY_CUBE,maxAmount:process.env.MAX_AMOUNT_ITTERATIONS_CUBE,pendingAmount:process.env.PENDING_AMOUNT_ITTERATIONS_CUBE },
-  clone:{ name: "clone", appToken: process.env.APP_TOKEN_CLONE, promoId: process.env.PROMO_ID_CLONE, delay:process.env.EVENTS_DELAY_CLONE,maxAmount:process.env.MAX_AMOUNT_ITTERATIONS_CLONE,pendingAmount:process.env.PENDING_AMOUNT_ITTERATIONS_CLONE },
-  miner:{ name: "miner", appToken: process.env.APP_TOKEN_MINER, promoId: process.env.PROMO_ID_MINER, delay:process.env.EVENTS_DELAY_MINER,maxAmount:process.env.MAX_AMOUNT_ITTERATIONS_MINER,pendingAmount:process.env.PENDING_AMOUNT_ITTERATIONS_MINER }
-}
-
-export default async function generateKeys (keyCount:number = 1, ctx:Context,chatId, messageId, progress:number, username:string, game:'bike'|'cube'|'clone'|'miner', edit:boolean = true): Promise<Awaited<string | void>[]> {
-  const EVENTS_DELAY = games[game].delay
+export default async function generateKeys (keyCount:number = 1, ctx:Context,chatId, messageId, progress:number, username:string, gameId: Games, edit:boolean = true): Promise<Awaited<string | void>[]> {
+  const game = games.find((game) => game.id === gameId)
   
-  const MAX_AMOUNT_ITTERATIONS = games[game].maxAmount
-  const PENDING_AMOUNT_ITTERATIONS = games[game].pendingAmount
+  const EVENTS_DELAY = game.delay
+  
+  const PENDING_AMOUNT_ITTERATIONS = game.iterations
   
   console.log(`generation for ${username} has been started ` + new Date())
   
@@ -27,16 +22,16 @@ export default async function generateKeys (keyCount:number = 1, ctx:Context,cha
     let clientToken
     
     try {
-      clientToken = await generateKeysReducers.login(clientId, game, services);
+      clientToken = await generateKeysReducers.login(clientId, game.app_token, services);
     } catch (error) {
       console.log(`Ошибка при авторизации для ${username}`)
       return null;
     }
     
-    for (let i: number = 0; i < +MAX_AMOUNT_ITTERATIONS - 1; i++) {
+    for (let i: number = 0; i < PENDING_AMOUNT_ITTERATIONS; i++) {
       try {
         await sleep(+EVENTS_DELAY * getRandomDelay());
-        progress += progress >= 100 ? 100 : (100 / (+PENDING_AMOUNT_ITTERATIONS + 1)) / keyCount
+        progress += progress >= 100 ? 100 : (100 / PENDING_AMOUNT_ITTERATIONS) / keyCount
 
         edit && await ctx.telegram.editMessageText(chatId,messageId, undefined,`Идет генерация кодов... ${Math.round(progress)}%`)
       } catch (error) {
@@ -44,7 +39,7 @@ export default async function generateKeys (keyCount:number = 1, ctx:Context,cha
       }
       
       try {
-        const hasCode = await generateKeysReducers.registerEvent(clientToken, game, services);
+        const hasCode = await generateKeysReducers.registerEvent(clientToken, game.promo_id, services);
         if (hasCode) {
           break;
         }
@@ -55,7 +50,7 @@ export default async function generateKeys (keyCount:number = 1, ctx:Context,cha
     }
     
     try {
-      const key = await generateKeysReducers.generateKey(clientToken, game, services);
+      const key = await generateKeysReducers.generateKey(clientToken, game.promo_id, services);
       return key;
     } catch (error) {
       console.log(`Ошибка при генерации ключа для ${username}`)

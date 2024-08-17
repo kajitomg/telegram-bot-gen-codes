@@ -24,17 +24,18 @@ export default {
     })
     
     scene.action('select::broadcast::getCurrentBroadcast', async (ctx) => {
-// @ts-ignore
+      // @ts-ignore
       ctx.scene.enter('broadcast-get-current')
     })
     
     scene.action('select::broadcast::createBroadcast', async (ctx) => {
-// @ts-ignore
+      // @ts-ignore
       ctx.scene.enter('broadcast-create')
     })
-    scene.on('text', async (ctx) => {
-// @ts-ignore
-      ctx.scene.reenter()
+    scene.on('message', async (ctx, next) => {
+      // @ts-ignore
+      await ctx.scene.leave()
+      await next()
     })
     
     return scene
@@ -66,6 +67,11 @@ export default {
 // @ts-ignore
       ctx.scene.enter('broadcast-create')
     })
+    scene.on('message', async (ctx, next) => {
+      // @ts-ignore
+      await ctx.scene.leave()
+      await next()
+    })
     
     return scene
   },
@@ -89,6 +95,11 @@ export default {
     scene.action('select::broadcast::back', async (ctx) => {
 // @ts-ignore
       ctx.scene.enter('broadcast-start')
+    })
+    scene.on('message', async (ctx, next) => {
+      // @ts-ignore
+      await ctx.scene.leave()
+      await next()
     })
     
     return scene
@@ -123,6 +134,7 @@ export default {
             rows.map(async (row) => {
               try {
                 await ctx.telegram.sendMessage(row.chat_id,msg)
+                await sleep(1000 / 60)
               } catch (error) {
                 console.log(error)
                 console.log(author.username + ' ' + error.response?.error_code + ' ' + error.response?.description)
@@ -142,6 +154,11 @@ export default {
     scene.action('select::broadcast::change', async (ctx) => {
       // @ts-ignore
       ctx.scene.enter('broadcast-create')
+    })
+    scene.on('message', async (ctx, next) => {
+      // @ts-ignore
+      await ctx.scene.leave()
+      await next()
     })
     
     return scene

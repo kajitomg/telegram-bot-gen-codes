@@ -5,8 +5,7 @@ import config from './config';
 import handlers from './handlers';
 import scenes from './scenes';
 import { Services } from './services';
-import { Telegraf, Markup, Scenes, session  } from 'telegraf';
-import sender from 'telegraf-sender'
+import { Telegraf, Scenes, session  } from 'telegraf';
 
 export const services = new Services(config)
 
@@ -33,13 +32,6 @@ const run = async () => {
   }
 }
 
-export const games = [
-  { id:'bike', name: "Riding Extreme 3D" },
-  { id:'cube', name: "Chain Cube" },
-  { id:'clone', name: "My Clone Army" },
-  { id:'miner', name: "Train Miner" },
-  { id:'all', name: "Все игры" }
-]
 // @ts-ignore
 const stage = new Scenes.Stage(scenes)
 
@@ -50,7 +42,6 @@ const authUsers = [
 
 bot.use(session())
 bot.use(stage.middleware())
-bot.use(sender)
 
 bot.start(handlers.base.start)
 

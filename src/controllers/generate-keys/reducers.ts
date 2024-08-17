@@ -1,14 +1,14 @@
+import { games, Games } from '../../models/game';
 import { Services } from '../../services';
-import { games } from './index';
 
 export default {
-  login: async function(clientId, game:'bike'|'cube'|'clone'|'miner', services: Services) {
+  login: async function(clientId, appToken: string, services: Services) {
     try {
       const agent = services.proxy.genProxyAgent()
       const response = await services.api.request<{clientToken: string}>({
         url: '/promo/login-client',
         method: 'POST',
-        data: { appToken: games[game].appToken, clientId, clientOrigin: 'deviceid' },
+        data: { appToken, clientId, clientOrigin: 'deviceid' },
         agent,
       })
       
@@ -18,7 +18,7 @@ export default {
     }
   },
   
-  registerEvent: async function(clientToken, game:'bike'|'cube'|'clone'|'miner', services: Services) {
+  registerEvent: async function(clientToken, promoId:string, services: Services) {
     try {
       const agent = services.proxy.genProxyAgent()
       const response = await services.api.request<{hasCode: boolean}>({
@@ -28,7 +28,7 @@ export default {
         },
         method: 'POST',
         data: {
-          promoId: games[game].promoId,
+          promoId,
           eventId: crypto.randomUUID(),
           eventOrigin: 'undefined'
         },
@@ -41,7 +41,7 @@ export default {
     }
   },
   
-  generateKey: async function(clientToken, game:'bike'|'cube'|'clone'|'miner', services: Services) {
+  generateKey: async function(clientToken, promoId: string, services: Services) {
     try {
       const response = await services.api.request<{promoCode: string}>({
         url: '/promo/create-code',
@@ -49,7 +49,7 @@ export default {
           'Authorization': `Bearer ${clientToken}`
         },
         method: 'POST',
-        data: { promoId: games[game].promoId },
+        data: { promoId },
         agent: services.proxy.genProxyAgent(),
       })
       

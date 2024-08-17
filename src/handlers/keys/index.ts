@@ -1,6 +1,6 @@
 import { Context, Markup } from 'telegraf';
 import generateKeys from '../../controllers/generate-keys';
-import { games } from '../../index';
+import { games, gamesAll } from '../../models/game';
 import { UsersSlices } from '../../slices/users';
 
 const pendingRequests = {};
@@ -27,11 +27,15 @@ export default {
       let keys = []
       let codes = ''
       if( pendingRequests[chatId].variant === 'all' ) {
-        keys = await Promise.all(Array.from({ length: +selectedCount }, async (empty, i) => {
-          //@ts-ignore
-          const keys = await generateKeys(+selectedCount,  ctx,chatId, message.message_id,  progress, msg.chat.username, games[i].id, i === 0)
-          
-          return `*${games[i].name}*` + '\n\n`' + keys.filter(key => key).join('`\n\n`')?.toString() + '`'
+        keys = await Promise.all(Array.from({ length: games.length }, async (empty, i) => {
+          try {
+            //@ts-ignore
+            const keys = await generateKeys(+selectedCount,  ctx,chatId, message.message_id,  progress, author.username, games[i].id, i === 5)
+            
+            return `*${games[i].name}*` + '\n\n`' + keys.filter(key => key).join('`\n\n`')?.toString() + '`'
+          } catch (e) {
+            console.log(e)
+          }
         }));
         codes = '\n\n' + keys.filter(key => key).join('\n\n')?.toString()  + '\n\n'
       } else {
@@ -68,7 +72,7 @@ export default {
         })
       
       const markup = Markup.inlineKeyboard(
-        games.map((game, i) => Markup.button.callback(game.name, `select::generate::game::${game.id}`)),
+        [...games, gamesAll].map((game, i) => Markup.button.callback(game.name, `select::generate::game::${game.id}`)),
         { columns: 2 },
       )
       
