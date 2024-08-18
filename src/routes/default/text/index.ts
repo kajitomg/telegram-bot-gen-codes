@@ -1,4 +1,5 @@
 import TelegramBot from 'node-telegram-bot-api';
+import { sleep } from '../../../helpers/sleep';
 import db from '../../../services/database';
 import { UsersSlices } from '../../../slices/users';
 
@@ -38,11 +39,12 @@ export const textDefaultRoutes = async (msg:TelegramBot.Message, bot: TelegramBo
               console.log('Произошла ошибка при поиске пользователя');
             } else {
               try {
-                rows.map(async (row) => {
+                await rows.map(async (row) => {
                   try {
                     await bot.sendMessage(row.chat_id, `
-                      Новое обновление бота\\!\n\nПодробности можете узнать в нашем канале \\- *[Хомячий Табор](https://t.me/hamtabor/362)*
+                      *Обновили бота*\\*!*\n\nК сожалению время генерации кодов на некоторые игры становится все больше, над этим стараются разработчики.\n\nМы пробуем решить эту проблему, следите за развитием бота в нашем канале \\- *[Хомячий Табор](https://t.me/hamtabor)*
                     `, { parse_mode: 'MarkdownV2' })
+                    await sleep(1000 / 200)
                   } catch (error) {
                     console.log(msg.chat.username + ' ' + error.response?.body?.error_code + ' ' + error.response?.body?.description)
                   }
