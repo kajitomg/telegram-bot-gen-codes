@@ -34,9 +34,13 @@ export default {
     
     scene.action(/^select::generate::game(?:::(\w+))$/, async (ctx, next) => {
       const game = ctx.match[1]
-      ctx.state.game = {
-        id: game
+      
+      if(!pendingRequests[ctx.chat.id]) {
+        pendingRequests[ctx.chat.id] = {}
       }
+      
+      pendingRequests[ctx.chat.id].game = game
+      
       //@ts-ignore
       await ctx.scene.enter('gen-codes-select-count')
       
@@ -53,21 +57,15 @@ export default {
   },
   GenCodesSelectCountScene: function () {
     const scene = new BaseScene('gen-codes-select-count')
-    const currState = {
-      game: {}
-    }
     
     scene.enter(async (ctx, next) => {
-      const state = ctx.state
-      
-      currState.game = state.game
       
       let game = ''
       
-      if( state.game.id === gamesAll.id  ) {
+      if( pendingRequests[ctx.chat.id].game === gamesAll.id  ) {
         game = gamesAll.name
       } else {
-        game = games.find(game => game.id === state.game.id).name
+        game = games.find(game => game.id === pendingRequests[ctx.chat.id].game)?.name
       }
       const author = ctx.from
       try {
@@ -87,11 +85,9 @@ export default {
     })
     
     scene.action(/^select::generate::count(?:::(\w+))$/, async (ctx, next) => {
-      const count = ctx.match[1]
-      ctx.state.game = {
-        ...currState.game,
-        count
-      }
+      const count = +ctx.match[1]
+      
+      pendingRequests[ctx.chat.id].count = count
       
       //@ts-ignore
       ctx.scene.enter('gen-codes-generate')
@@ -114,10 +110,9 @@ export default {
     scene.enter(async (ctx) => {
       const chatId = ctx.chat.id
       const author = ctx.from
-      const state = ctx.state
       
       try {
-        if ( pendingRequests[chatId] ) {
+        if ( pendingRequests[chatId].pending ) {
           return await ctx.sendMessage(`У вас уже есть 1 активный запрос, дождитесь его окончания!`)
         }
         const progress = 0
@@ -125,15 +120,15 @@ export default {
         
         const message = await ctx.sendMessage(`Идет генерация кодов... ${progress}%`);
         
-        pendingRequests[chatId] = true
-        console.log(state.game.id)
+        pendingRequests[chatId].pending = true
+        console.log(pendingRequests[chatId].game)
         let keys = []
         let codes = ''
-        if( state.game.id === 'all' ) {
+        if( pendingRequests[chatId].game === 'all' ) {
           keys = await Promise.all(Array.from({ length: games.length }, async (empty, i) => {
             try {
               //@ts-ignore
-              const keys = await generateKeys(state.game.count,  ctx,chatId, message.message_id,  progress, author.username, games[i].id, i === 2)
+              const keys = await generateKeys(pendingRequests[chatId].count,  ctx,chatId, message.message_id,  progress, author.username, games[i].id, i === 2)
               
               return `*${games[i].name}*` + '\n\n`' + keys.filter(key => key).join('`\n\n`')?.toString() + '`'
             } catch (e) {
@@ -142,7 +137,7 @@ export default {
           }));
           codes = '\n\n' + keys.filter(key => key).join('\n\n')?.toString()  + '\n\n'
         } else {
-          keys = await generateKeys(state.game.count,  ctx,chatId, message.message_id, progress, author.username, state.game.id)
+          keys = await generateKeys(pendingRequests[chatId].count,  ctx,chatId, message.message_id, progress, author.username, pendingRequests[chatId].game)
           codes = '\n\n`' + keys.filter(key => key).join('`\n\n`')?.toString() + '`\n\n'
         }
         delete pendingRequests[chatId]
