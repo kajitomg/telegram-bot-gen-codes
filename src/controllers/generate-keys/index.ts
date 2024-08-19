@@ -9,7 +9,6 @@ import { Games, games } from '../../models/game';
 
 export default async function generateKeys (keyCount:number = 1, ctx:Context,chatId, messageId, progress:number, username:string, gameId: Games, edit:boolean = true): Promise<Awaited<string | void>[]> {
   const game = games.find((game) => game.id === gameId)
-  
   const EVENTS_DELAY = game.delay
   
   const PENDING_AMOUNT_ITERATIONS = game.iterations

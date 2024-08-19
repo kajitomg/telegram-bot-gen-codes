@@ -133,7 +133,7 @@ export default {
             // @ts-ignore
             rows.map(async (row) => {
               try {
-                await ctx.telegram.sendMessage(row.chat_id,msg)
+                await ctx.telegram.sendMessage(row.chat_id, msg)
                 await sleep(1000 / 60)
               } catch (error) {
                 console.log(error)

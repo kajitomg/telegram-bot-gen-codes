@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 export enum Games {
   BIKE = 'bike',
   CUBE = 'cube',

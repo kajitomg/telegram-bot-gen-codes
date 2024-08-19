@@ -9,6 +9,9 @@ module.exports = {
     filename: 'bundle.js',
     clean:true
   },
+  optimization: {
+    minimize: false,
+  },
   externals: {
     sqlite3: 'commonjs sqlite3'
   },
