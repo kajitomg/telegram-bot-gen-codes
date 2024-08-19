@@ -12,7 +12,7 @@ export default async function generateKeys (keyCount:number = 1, ctx:Context,cha
   
   const EVENTS_DELAY = game.delay
   
-  const PENDING_AMOUNT_ITTERATIONS = game.iterations
+  const PENDING_AMOUNT_ITERATIONS = game.iterations
   
   console.log(`generation for ${username} has been started ` + new Date())
   
@@ -28,23 +28,20 @@ export default async function generateKeys (keyCount:number = 1, ctx:Context,cha
       return null;
     }
     
-    for (let i: number = 0; i < PENDING_AMOUNT_ITTERATIONS; i++) {
+    for (let i: number = 0; i < PENDING_AMOUNT_ITERATIONS * 2; i++) {
       try {
         await sleep(+EVENTS_DELAY * getRandomDelay());
-        progress += progress >= 100 ? 100 : (100 / PENDING_AMOUNT_ITTERATIONS) / keyCount
-
+        progress += (100 / (PENDING_AMOUNT_ITERATIONS)) / keyCount
+        progress = progress >= 100 ? 100 : progress
+        
         edit && await ctx.telegram.editMessageText(chatId,messageId, undefined,`Идет генерация кодов... ${Math.round(progress)}%`)
-      } catch (error) {
-        console.log(username + ' ' + error.response?.error_code + ' ' + error.response?.description)
-      }
-      
-      try {
+  
         const hasCode = await generateKeysReducers.registerEvent(clientToken, game.promo_id, services);
         if (hasCode) {
           break;
         }
       } catch (error) {
-        console.log(`Ошибка при регистрации события для ${username}`)
+        console.log(username + ' ' + error.response?.error_code + ' ' + error.response?.description)
         return null;
       }
     }

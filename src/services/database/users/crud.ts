@@ -25,7 +25,7 @@ const readUsers = async (callback) => {
 
 const readDistinctUsers = async (callback) => {
   const sql = 'SELECT DISTINCT chat_id FROM items';
-  return await db.all(sql, [],  callback);
+  return db.all(sql, [],  callback);
 }
 
 //READ_ONE_BY
@@ -42,13 +42,13 @@ const readUserBy = async (selectors: { id?:number, chat_id?:number, user_id?:str
 
 //UPDATE
 
-const updateUserById = async (id:number, selectors: { chat_id?:number, user_id?:string, username?:string, last_session_at?:string }, callback) => {
-  const dateNow = getDateNow();
+const updateUserById = async (id:number, selectors: { chat_id?:number, user_id?:string, username?:string }, callback) => {
+  const dateNow = getDateNow().toISOString();
   const sqlSelectors = Object.entries(selectors)
   const sqlSet = sqlSelectors.map(([key]) => `${key} = ?`).join(', ')
-  const sql = `UPDATE items SET ${sqlSet}, updated_at = ? WHERE id = ?`;
+  const sql = `UPDATE items SET ${sqlSet}, last_session_at = ?, updated_at = ? WHERE id = ?`;
   
-  await db.run(sql, [ ...sqlSelectors.map(([key, value]) => value), dateNow, id ],  callback);
+  await db.run(sql, [ ...sqlSelectors.map(([key, value]) => value), dateNow, dateNow, id ],  callback);
 }
 
 //DELETE

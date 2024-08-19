@@ -16,10 +16,10 @@ export class UsersSlices {
         if (err) {
           console.log(err);
           console.log('Произошла ошибка при поиске пользователя');
-          await errorCallback(err)
+          errorCallback && await errorCallback(err)
           return null
         } else {
-          await successCallback(row)
+          successCallback && await successCallback(row)
         }
       })
     } catch (e) {
@@ -46,9 +46,39 @@ export class UsersSlices {
       }, async (err, row) => {
         if(err) {
           console.log('Произошла ошибка при создании пользователя')
-          await errorCallback(err)
+          errorCallback && await errorCallback(err)
         } else {
-          await successCallback(row)
+          successCallback && await successCallback(row)
+        }
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  static updateUser = async function(
+    {
+      id,
+      selectors
+    }: { id:number, selectors: {
+        chatId:number,
+        userId:string,
+        username:string} },
+    {
+      successCallback,
+      errorCallback
+    }: { successCallback?:(row) => Promise<void>, errorCallback?:(err) => Promise<void> } = {}
+  ) {
+    try {
+      await db.userDB.updateUserById(id,{
+        chat_id:selectors.chatId,
+        user_id:selectors.userId,
+        username:selectors.username,
+      }, async (err, row) => {
+        if(err) {
+          console.log('Произошла ошибка при обновлении пользователя')
+          errorCallback && await errorCallback(err)
+        } else {
+          successCallback && await successCallback(row)
         }
       })
     } catch (e) {

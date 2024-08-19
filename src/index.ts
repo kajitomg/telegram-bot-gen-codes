@@ -45,7 +45,10 @@ bot.use(stage.middleware())
 
 bot.start(handlers.base.start)
 
-bot.command('gencodes', handlers.keys.selectGenerateGame)
+bot.command('gencodes', async ctx => {
+  // @ts-ignore
+  return await ctx.scene.enter('gen-codes-select-game')
+})
 
 // @ts-ignore
 bot.command('broadcast', async ctx => {
@@ -57,10 +60,6 @@ bot.command('broadcast', async ctx => {
     return await handlers.base.default(ctx)
   }
 })
-
-bot.action(/^select::generate::game(?:::(\w+))$/, handlers.keys.selectGenerateCount);
-
-bot.action(/^select::generate::count(?:::(\w+))$/, handlers.keys.generate);
 
 bot.command('projects', handlers.projects.selectProject)
 

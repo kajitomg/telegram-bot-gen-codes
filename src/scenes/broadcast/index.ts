@@ -13,7 +13,7 @@ const text = {
 }
 
 export default {
-  start: function () {
+  startGenScene: function () {
     const scene = new BaseScene('broadcast-start')
     scene.enter(async (ctx) => {
       const markup = Markup.inlineKeyboard(
