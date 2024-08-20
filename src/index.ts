@@ -5,11 +5,11 @@ import config from './config';
 import handlers from './handlers';
 import scenes from './scenes';
 import { Services } from './services';
-import { Telegraf, Scenes, session  } from 'telegraf';
+import { Telegraf, Scenes, session, Composer } from 'telegraf';
 
 export const services = new Services(config)
 
-export const bot = new Telegraf(process.env.API_KEY_BOT );
+export const bot = new Telegraf<Scenes.SceneContext>(process.env.API_KEY_BOT );
 
 const app = express()
 
@@ -32,8 +32,7 @@ const run = async () => {
   }
 }
 
-// @ts-ignore
-const stage = new Scenes.Stage(scenes)
+const stage = new Scenes.Stage<Scenes.SceneContext>(scenes)
 
 const authUsers = [
   806145885,
@@ -43,29 +42,29 @@ const authUsers = [
 bot.use(session())
 bot.use(stage.middleware())
 
-bot.start(handlers.base.start)
+const userBot = new Composer<Scenes.SceneContext>();
 
-bot.command('gencodes', async ctx => {
-  // @ts-ignore
+const adminBot = new Composer<Scenes.SceneContext>();
+
+userBot.start(handlers.base.start)
+
+userBot.command('gencodes', async ctx => {
   return await ctx.scene.enter('gen-codes-select-game')
 })
 
-// @ts-ignore
-bot.command('broadcast', async ctx => {
-  const admin = authUsers.includes(ctx.chat.id)
-  if(admin) {
-    // @ts-ignore
+adminBot.command('broadcast', async ctx => {
     return await ctx.scene.enter('broadcast-start')
-  } else {
-    return await handlers.base.default(ctx)
-  }
 })
 
-bot.command('projects', handlers.projects.selectProject)
+adminBot.command('projects', handlers.projects.selectProject)
 
-bot.action(/^select::project(?:::(\w+))$/, handlers.projects.getProjectServices);
+adminBot.action(/^select::project(?:::(\w+))$/, handlers.projects.getProjectServices);
 
-bot.on('message', handlers.base.default)
+userBot.on('message', handlers.base.default)
+
+bot.use(Composer.acl(authUsers,adminBot))
+
+bot.use(userBot)
 
 
 

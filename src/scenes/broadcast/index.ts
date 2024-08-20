@@ -1,4 +1,4 @@
-import { Markup } from 'telegraf';
+import { Markup, Scenes } from 'telegraf';
 import { bold, fmt, FmtString } from 'telegraf/format';
 import { BaseScene } from 'telegraf/scenes';
 import send from '../../helpers/send';
@@ -14,7 +14,7 @@ const text = {
 
 export default {
   startGenScene: function () {
-    const scene = new BaseScene('broadcast-start')
+    const scene = new BaseScene<Scenes.SceneContext>('broadcast-start')
     scene.enter(async (ctx) => {
       const markup = Markup.inlineKeyboard(
         broadcastButtons.map((button) => Markup.button.callback(button.name, `select::broadcast::${button.id}`)),
@@ -24,16 +24,13 @@ export default {
     })
     
     scene.action('select::broadcast::getCurrentBroadcast', async (ctx) => {
-      // @ts-ignore
       ctx.scene.enter('broadcast-get-current')
     })
     
     scene.action('select::broadcast::createBroadcast', async (ctx) => {
-      // @ts-ignore
       ctx.scene.enter('broadcast-create')
     })
     scene.on('message', async (ctx, next) => {
-      // @ts-ignore
       await ctx.scene.leave()
       await next()
     })
@@ -42,7 +39,7 @@ export default {
   },
   
   getCurrentBroadcast: function () {
-    const scene = new BaseScene('broadcast-get-current')
+    const scene = new BaseScene<Scenes.SceneContext>('broadcast-get-current')
     scene.enter(async (ctx) => {
       const markup = Markup.inlineKeyboard(
         [...(text ? [Markup.button.callback('Запустить пост', `select::broadcast::launch`)] : []),Markup.button.callback('Сменить пост', `select::broadcast::change`),
@@ -54,21 +51,17 @@ export default {
     })
     
     scene.action('select::broadcast::back', async (ctx) => {
-// @ts-ignore
       ctx.scene.enter('broadcast-start')
     })
     
     scene.action('select::broadcast::launch', async (ctx) => {
-// @ts-ignore
       ctx.scene.enter('broadcast-launch')
     })
     
     scene.action('select::broadcast::change', async (ctx) => {
-// @ts-ignore
       ctx.scene.enter('broadcast-create')
     })
     scene.on('message', async (ctx, next) => {
-      // @ts-ignore
       await ctx.scene.leave()
       await next()
     })
@@ -77,7 +70,7 @@ export default {
   },
   
   createBroadcast: function () {
-    const scene = new BaseScene('broadcast-create')
+    const scene = new BaseScene<Scenes.SceneContext>('broadcast-create')
     scene.enter(async (ctx) => {
       const markup = Markup.inlineKeyboard(
         [Markup.button.callback('Назад к списку действий', `select::broadcast::back`)],
@@ -88,16 +81,13 @@ export default {
     scene.on('text', async (ctx) => {
       text.value = await ctx.message.text
       text.entities = await ctx.message.entities
-// @ts-ignore
       await ctx.scene.enter('broadcast-get-current')
     })
     
     scene.action('select::broadcast::back', async (ctx) => {
-// @ts-ignore
       ctx.scene.enter('broadcast-start')
     })
     scene.on('message', async (ctx, next) => {
-      // @ts-ignore
       await ctx.scene.leave()
       await next()
     })
@@ -106,7 +96,7 @@ export default {
   },
   
   launchBroadcast: function () {
-    const scene = new BaseScene('broadcast-launch')
+    const scene = new BaseScene<Scenes.SceneContext>('broadcast-launch')
     scene.enter(async (ctx) => {
       const markup = Markup.inlineKeyboard(
         [...(text ? [Markup.button.callback('Запустить пост', `select::broadcast::launch`)] : []),Markup.button.callback('Сменить пост', `select::broadcast::change`),
@@ -117,7 +107,6 @@ export default {
       await send(ctx, fmt(bold('Вы уверены, что хотите запустить рассылку?'),'\n\n',text.value ? msg : 'Нет поста'),{reply_markup:markup.reply_markup})
     })
     scene.action('select::broadcast::back', async (ctx) => {
-      // @ts-ignore
       ctx.scene.enter('broadcast-start')
     })
     
@@ -130,7 +119,6 @@ export default {
           console.log('Произошла ошибка при поиске пользователя');
         } else {
           try {
-            // @ts-ignore
             rows.map(async (row) => {
               try {
                 await ctx.telegram.sendMessage(row.chat_id, msg)
@@ -146,17 +134,14 @@ export default {
           }
         }
       })
-      // @ts-ignore
       
       await ctx.scene.leave()
     })
     
     scene.action('select::broadcast::change', async (ctx) => {
-      // @ts-ignore
       ctx.scene.enter('broadcast-create')
     })
     scene.on('message', async (ctx, next) => {
-      // @ts-ignore
       await ctx.scene.leave()
       await next()
     })

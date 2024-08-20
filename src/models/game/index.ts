@@ -7,6 +7,7 @@ export enum Games {
   TRAIN = 'train',
   MERGE = 'merge',
   TWERK = 'twerk',
+  ALL = 'all',
 }
 
 type Game = {
@@ -69,7 +70,7 @@ export const games:Game[] = [
   }
 ]
 
-export const gamesAll = {
-  id: 'all',
+export const gamesAll: Game = {
+  id: Games.ALL,
   name: 'Все игры',
 }
