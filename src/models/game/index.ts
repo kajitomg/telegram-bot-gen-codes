@@ -7,6 +7,7 @@ export enum Games {
   TRAIN = 'train',
   MERGE = 'merge',
   TWERK = 'twerk',
+  POLY = 'poly',
   ALL = 'all',
 }
 
@@ -67,6 +68,14 @@ export const games:Game[] = [
     promo_id: process.env.PROMO_ID_TWERK,
     delay: +process.env.EVENTS_DELAY_TWERK,
     iterations:+ process.env.AMOUNT_ITTERATIONS_TWERK,
+  },
+  {
+    id: Games.POLY,
+    name: 'Polysphere',
+    app_token: process.env.APP_TOKEN_POLY,
+    promo_id: process.env.PROMO_ID_POLY,
+    delay: +process.env.EVENTS_DELAY_POLY,
+    iterations:+ process.env.AMOUNT_ITTERATIONS_POLY,
   }
 ]
 

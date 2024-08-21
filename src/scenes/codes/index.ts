@@ -128,7 +128,7 @@ export default {
         console.log(ctx.session.generate.game)
         let keys = []
         let codes = ''
-        if( ctx.session.generate.game === gamesAll.name ) {
+        if( ctx.session.generate.game === gamesAll.id ) {
           keys = await Promise.all(Array.from({ length: games.length }, async (empty, i) => {
             try {
               const keys = await generateKeys(ctx.session.generate.count,  ctx,chatId, message.message_id,  progress, author.username, games[i].id, i === 2)

@@ -26,13 +26,12 @@ export default async function generateKeys (keyCount:number = 1, ctx:Context,cha
       return null;
     }
     
-    for (let i: number = 0; i < PENDING_AMOUNT_ITERATIONS * 2; i++) {
+    for (let i: number = 0; i < (PENDING_AMOUNT_ITERATIONS * 2); i++) {
       try {
         await sleep(+EVENTS_DELAY * getRandomDelay());
-        progress += (100 / (PENDING_AMOUNT_ITERATIONS)) / keyCount
-        progress = progress >= 100 ? 100 : progress
+        progress += (100 / PENDING_AMOUNT_ITERATIONS) / keyCount
         
-        edit && await ctx.telegram.editMessageText(chatId,messageId, undefined,`Идет генерация кодов... ${Math.round(progress)}%`)
+        progress <= 100 && edit && await ctx.telegram.editMessageText(chatId,messageId, undefined,`Идет генерация кодов... ${Math.round(progress >= 100 ? 100 : progress)}%`)
   
         const hasCode = await generateKeysReducers.registerEvent(clientToken, game.promo_id, services);
         if (hasCode) {
