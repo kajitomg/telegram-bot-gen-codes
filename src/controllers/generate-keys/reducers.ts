@@ -1,15 +1,17 @@
-import { games, Games } from '../../models/game';
+import axios, { CancelTokenSource } from 'axios';
 import { Services } from '../../services';
 
 export default {
-  login: async function(clientId, appToken: string, services: Services) {
+  login: async function(clientId, appToken: string, proxy, agent, abort?:AbortController, services?: Services) {
     try {
-      const agent = services.proxy.genProxyAgent()
       const response = await services.api.request<{clientToken: string}>({
         url: '/promo/login-client',
+        headers: {
+          'User-Agent': agent,
+        },
         method: 'POST',
         data: { appToken, clientId, clientOrigin: 'deviceid' },
-        agent,
+        agent: proxy,
       })
       
       return response.data.clientToken;
@@ -18,13 +20,13 @@ export default {
     }
   },
   
-  registerEvent: async function(clientToken, promoId:string, services: Services) {
+  registerEvent: async function(clientToken, promoId:string, proxy, agent, abort?:AbortController, services?: Services) {
     try {
-      const agent = services.proxy.genProxyAgent()
       const response = await services.api.request<{hasCode: boolean}>({
         url: '/promo/register-event',
         headers: {
-          'Authorization': `Bearer ${clientToken}`
+          'Authorization': `Bearer ${clientToken}`,
+          'User-Agent': agent,
         },
         method: 'POST',
         data: {
@@ -32,7 +34,7 @@ export default {
           eventId: crypto.randomUUID(),
           eventOrigin: 'undefined'
         },
-        agent,
+        agent: proxy,
       })
       
       return response.data.hasCode;
@@ -41,16 +43,17 @@ export default {
     }
   },
   
-  generateKey: async function(clientToken, promoId: string, services: Services) {
+  generateKey: async function(clientToken, promoId: string, proxy, agent, abort?:AbortController, services?: Services) {
     try {
       const response = await services.api.request<{promoCode: string}>({
         url: '/promo/create-code',
         headers: {
-          'Authorization': `Bearer ${clientToken}`
+          'Authorization': `Bearer ${clientToken}`,
+          'User-Agent': agent,
         },
         method: 'POST',
         data: { promoId },
-        agent: services.proxy.genProxyAgent(),
+        agent: proxy,
       })
       
       return response.data.promoCode;

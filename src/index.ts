@@ -53,7 +53,11 @@ userBot.command('gencodes', async ctx => {
 })
 
 adminBot.command('broadcast', async ctx => {
-    return await ctx.scene.enter('broadcast-start')
+  return await ctx.scene.enter('broadcast-start')
+})
+
+adminBot.command('gencodessafe', async ctx => {
+  return await ctx.scene.enter('gen-codes-safe-check-subscribe')
 })
 
 adminBot.command('projects', handlers.projects.selectProject)

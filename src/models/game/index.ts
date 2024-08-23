@@ -8,6 +8,8 @@ export enum Games {
   MERGE = 'merge',
   TWERK = 'twerk',
   POLY = 'poly',
+  TRIM = 'trim',
+  RACE = 'race',
   ALL = 'all',
 }
 
@@ -76,7 +78,23 @@ export const games:Game[] = [
     promo_id: process.env.PROMO_ID_POLY,
     delay: +process.env.EVENTS_DELAY_POLY,
     iterations:+ process.env.AMOUNT_ITTERATIONS_POLY,
-  }
+  },
+  {
+    id: Games.TRIM,
+    name: 'Mow and Trim',
+    app_token: process.env.APP_TOKEN_TRIM,
+    promo_id: process.env.PROMO_ID_TRIM,
+    delay: +process.env.EVENTS_DELAY_TRIM,
+    iterations:+ process.env.AMOUNT_ITTERATIONS_TRIM,
+  },
+  {
+    id: Games.RACE,
+    name: 'Mud Racing',
+    app_token: process.env.APP_TOKEN_RACE,
+    promo_id: process.env.PROMO_ID_RACE,
+    delay: +process.env.EVENTS_DELAY_RACE,
+    iterations:+ process.env.AMOUNT_ITTERATIONS_RACE,
+  },
 ]
 
 export const gamesAll: Game = {

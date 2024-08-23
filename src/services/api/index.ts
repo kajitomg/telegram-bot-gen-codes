@@ -2,6 +2,10 @@ import cfg from "../../config";
 import axios, {Axios, AxiosResponse} from "axios";
 import { Services } from '../index';
 import ProxyService from '../proxy';
+import ua from 'user-agents';
+
+const androidUserAgent = ua.random({ platform: 'Android' });
+const iosUserAgent = ua.random({ platform: 'iPhone' });
 
 class APIService {
   
@@ -20,6 +24,7 @@ class APIService {
     this.config = config
     this.defaultHeaders = {
       'Content-Type': 'application/json',
+      'User-Agent': androidUserAgent,
     }
   }
 

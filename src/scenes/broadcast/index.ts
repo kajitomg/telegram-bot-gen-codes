@@ -113,21 +113,19 @@ export default {
     scene.action('select::broadcast::launch', async (ctx) => {
       const author = ctx.from
       const msg = new FmtString(text.value, text.entities)
-      await db.userDB.readDistinctUsers(async (err, rows) => {
+      await db.userDB.readDistinctUsers(async (err, users) => {
         if (err) {
-          console.log(err);
           console.log('Произошла ошибка при поиске пользователя');
         } else {
           try {
-            rows.map(async (row) => {
+            for (const user of users) {
               try {
-                await ctx.telegram.sendMessage(row.chat_id, msg)
-                await sleep(1000 / 60)
+                await ctx.telegram.sendMessage(user.chat_id, msg);
+                await sleep(1000 / 30)
               } catch (error) {
-                console.log(error)
-                console.log(author.username + ' ' + error.response?.error_code + ' ' + error.response?.description)
+                console.log(user.chat_id + ' ' + error.response?.error_code + ' ' + error.response?.description)
               }
-            })
+            }
             ctx.deleteMessage()
           } catch (error) {
             console.log(author.username + ' ' + error.response?.error_code + ' ' + error.response?.description)
