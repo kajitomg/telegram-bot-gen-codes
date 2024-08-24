@@ -1,5 +1,4 @@
 require('dotenv').config()
-import axios, { Axios, CancelTokenSource } from 'axios';
 import { Context, Markup } from 'telegraf';
 import { generateClientId } from '../../helpers/generate-client-id';
 import { getRandomDelay } from '../../helpers/get-random-delay';
@@ -21,12 +20,11 @@ export default async function generateKeysSafe (keyCount:number = 1, ctx:Context
 
     for (let i:number = 0; i < keyCount; i++ ) {
       try {
-        if(abort.signal.aborted) break
         const proxy = services.proxy.genProxyAgent()
         const iosUserAgent = ua.random({ platform: 'iPhone' });
         const clientId = generateClientId();
         keys = [...keys, await genKey(clientId,iosUserAgent,proxy)]
-        // await sleep(300000 * getRandomDelay());
+        await sleep(300000 * getRandomDelay(),{signal: abort.signal});
       } catch (e) {
         console.log(e)
       }
@@ -36,28 +34,42 @@ export default async function generateKeysSafe (keyCount:number = 1, ctx:Context
   }
   
   const genKey = async (clientId, agent, proxy) => {
-    if(abort.signal.aborted) return
+    abort.signal.throwIfAborted()
     let clientToken
     
     try {
-      clientToken = await generateKeysReducers.login(clientId, game.app_token, proxy, agent, abort,services);
+      clientToken = await generateKeysReducers.login({
+        clientId,
+        appToken: game.app_token
+      },services, {
+        proxy,
+        agent,
+        abort
+      });
     } catch (error) {
       console.log(`Ошибка при авторизации для ${username}`)
       return null;
     }
     
     for (let i: number = 0; i < (PENDING_AMOUNT_ITERATIONS * 2); i++) {
-      if(abort.signal.aborted) break
+      abort.signal.throwIfAborted()
       try {
-        await sleep((EVENTS_DELAY) * getRandomDelay());
+        await sleep((EVENTS_DELAY + 60000) * getRandomDelay(),{signal: abort.signal});
         progress += 100 / (PENDING_AMOUNT_ITERATIONS * keyCount)
         const markup = Markup.inlineKeyboard(
           [0].map(() => Markup.button.callback('Остановить генерацию', `select::generate::stop`)),
           { columns: 2},
         )
-        edit && await ctx.telegram.editMessageText(chatId,messageId, undefined,`Идет генерация кодов... ${Math.round(progress >= 100 ? 100 : progress)}%`,markup )
+        edit && await ctx.telegram.editMessageText(chatId,messageId, undefined,`Идет генерация кодов\\.\\.\\. ${Math.round(progress >= 100 ? 100 : progress)}%` + '\n' + '_\\(Может занять много времени\\)_', { reply_markup: markup.reply_markup, parse_mode:'MarkdownV2' } )
         
-        const hasCode = await generateKeysReducers.registerEvent(clientToken, game.promo_id, proxy, agent, abort, services);
+        const hasCode = await generateKeysReducers.registerEvent({
+          clientToken,
+          promoId: game.promo_id
+        },services, {
+          proxy,
+          agent,
+          abort
+        });
         
         if (hasCode) {
           break;
@@ -68,9 +80,15 @@ export default async function generateKeysSafe (keyCount:number = 1, ctx:Context
       }
     }
     try {
-      if(abort.signal.aborted) return
-      const key = await generateKeysReducers.generateKey(clientToken, game.promo_id, proxy, agent, abort, services);
-      console.log(key)
+      abort.signal.throwIfAborted()
+      const key = await generateKeysReducers.generateKey({
+        clientToken,
+        promoId: game.promo_id
+      },services, {
+        proxy,
+        agent,
+        abort
+      });
       
       return key;
     } catch (error) {

@@ -56,7 +56,7 @@ adminBot.command('broadcast', async ctx => {
   return await ctx.scene.enter('broadcast-start')
 })
 
-adminBot.command('gencodessafe', async ctx => {
+userBot.command('gencodessafe', async ctx => {
   return await ctx.scene.enter('gen-codes-safe-check-subscribe')
 })
 

@@ -31,7 +31,7 @@ export default {
       try {
         await inspectUserWrapper(chatId, author)
         
-        //await ctx.sendMessage('*Вы выбрали Обычную генерацию*',{parse_mode:'MarkdownV2'})
+        await ctx.sendMessage('*Вы выбрали Обычную генерацию*',{parse_mode:'MarkdownV2'})
         
         const markup = Markup.inlineKeyboard(
           [
@@ -62,7 +62,6 @@ export default {
     })
     
     scene.on('message', async (ctx, next) => {
-      await ctx.scene.leave()
       await next()
     })
     
@@ -122,6 +121,10 @@ export default {
       const chatId = ctx.chat.id
       const author = ctx.from
       
+      const controller = new AbortController();
+      
+      ctx.session.generate.abort = controller
+      
       try {
         const progress = 0
         await ctx.deleteMessage()
@@ -129,7 +132,12 @@ export default {
           return await ctx.sendMessage(`У вас уже есть 1 активный запрос, дождитесь его окончания!`)
         }
         
-        const message = await ctx.sendMessage(`Идет генерация кодов... ${progress}%`);
+        const markup = Markup.inlineKeyboard(
+          [0].map((count, i) => Markup.button.callback('Остановить генерацию', `select::generate::stop`)),
+          { columns: 2},
+        )
+        
+        const message = await ctx.sendMessage(`Идет генерация кодов... ${progress}%`,markup);
         
         ctx.session.generate.pending = true
         console.log(ctx.session.generate.game)
@@ -138,7 +146,7 @@ export default {
         if( ctx.session.generate.game === gamesAll.id ) {
           keys = await Promise.all(Array.from({ length: games.length }, async (empty, i) => {
             try {
-              const keys = await generateKeys(ctx.session.generate.count,  ctx,chatId, message.message_id,  progress, author.username, games[i].id, i === 2)
+              const keys = await generateKeys(ctx.session.generate.count,  ctx,chatId, message.message_id,  progress, author.username, games[i].id, controller, i === 2)
               
               return `*${games[i].name}*` + '\n\n`' + keys.filter(key => key).join('`\n\n`')?.toString() + '`'
             } catch (e) {
@@ -147,12 +155,12 @@ export default {
           }));
           codes = '\n\n' + keys.filter(key => key).join('\n\n')?.toString()  + '\n\n'
         } else {
-          keys = await generateKeys(ctx.session.generate.count,  ctx,chatId, message.message_id, progress, author.username, ctx.session.generate.game)
+          keys = await generateKeys(ctx.session.generate.count,  ctx,chatId, message.message_id, progress, author.username, ctx.session.generate.game, controller)
           codes = '\n\n`' + keys.filter(key => key).join('`\n\n`')?.toString() + '`\n\n'
         }
         ctx.session.generate = {}
         await ctx.telegram.deleteMessage(chatId, message.message_id)
-        await ctx.sendMessage(
+        !controller.signal.aborted && await ctx.sendMessage(
           '*Коды успешно сгенерированы \\(нажмите на код, чтобы скопировать\\)\\:*' +
           `${codes}` +
           '*Подписывайся на наш канал \\- [Хомячий Табор](https://t.me/+lZLomxu29j81NGQy)*',
@@ -161,11 +169,20 @@ export default {
       } catch (error) {
         console.log(author.username + ' ' + error.response?.error_code + ' ' + error.response?.description)
       }
+      controller.abort('Request is finished')
     })
     
-    scene.on('message', async (ctx, next) => {
+    scene.action('select::generate::stop', async (ctx, next) => {
+      const controller = ctx.session.generate.abort
+      controller.abort('Request is canceled')
+      
       await ctx.scene.leave()
       await next()
+    })
+    
+    
+    scene.on('message', async (ctx, next) => {
+      ctx.sendMessage('Происходит генерация кодов, либо дождитесь окончания, либо остановите генерацию!')
     })
     
     return scene
@@ -196,11 +213,11 @@ export default {
           await ctx.scene.enter('gen-codes-safe-select-game')
         } else {
           const markup = Markup.inlineKeyboard(
-            [1].map((game) => Markup.button.callback('Генерация', `goto::generate::safe`)),
+            [1].map((game) => Markup.button.callback('Перейти к генерации', `goto::generate::safe`)),
             { columns: 2 },
           )
           await send(ctx,
-            '*Для начала подпишись на каналы\\:*' +
+            '*Подпишись на каналы\\:*' +
             `\n\n` +
             '*Наш канал \\- [Хомячий Табор](https://t.me/+lZLomxu29j81NGQy)*' +
             `\n\n` +
@@ -243,7 +260,7 @@ export default {
           ].map((game) => Markup.button.callback(game.name, `select::generate::game::${game.id}`)),
           { columns: 2 },
         )
-        await ctx.sendMessage( 'Выберите игру:', markup)
+        await send(ctx,  'Выберите игру:', markup)
       } catch (error) {
         console.log(author.username + ' ' + error.response?.body?.error_code + ' ' + error.response?.body?.description)
       }
@@ -321,7 +338,7 @@ export default {
   GenCodesSafeGenerateScene: function () {
     const scene = new BaseScene<CodesSceneContext>('gen-codes-safe-generate')
     
-    scene.enter(async (ctx) => {
+    scene.enter(async (ctx, next) => {
       const chatId = ctx.chat.id
       const author = ctx.from
       
@@ -336,11 +353,11 @@ export default {
           return await ctx.sendMessage(`У вас уже есть 1 активный запрос, дождитесь его окончания!`)
         }
         const markup = Markup.inlineKeyboard(
-          [0].map((count, i) => Markup.button.callback('Остановить генерацию', `select::generate::stop`)),
+          [0].map(() => Markup.button.callback('Остановить генерацию', `select::generate::stop`)),
           { columns: 2},
         )
         
-        const message = await ctx.sendMessage(`Идет генерация кодов... ${progress}%`,markup);
+        const message = await ctx.sendMessage(`Идет генерация кодов\\.\\.\\. ${progress}%` + '\n' + '_\\(Может занять много времени\\)_',{reply_markup:markup.reply_markup,parse_mode:'MarkdownV2'});
         
         ctx.session.generate.pending = true
         console.log(ctx.session.generate.game)
@@ -364,7 +381,7 @@ export default {
         }
         ctx.session.generate = {}
         await ctx.telegram.deleteMessage(chatId, message.message_id)
-        await ctx.sendMessage(
+        !controller.signal.aborted && await ctx.sendMessage(
           '*Коды успешно сгенерированы \\(нажмите на код, чтобы скопировать\\)\\:*' +
           `${codes}` +
           '*Подписывайся на наш канал \\- [Хомячий Табор](https://t.me/+lZLomxu29j81NGQy)*',
@@ -378,19 +395,14 @@ export default {
     
     scene.action('select::generate::stop', async (ctx, next) => {
       const controller = ctx.session.generate.abort
-      
       controller.abort('Request is canceled')
-      await ctx.deleteMessage()
-      ctx.session.generate = {}
       
-      await ctx.scene.enter('gen-codes-safe-check-subscribe')
-      
+      await ctx.scene.leave()
       await next()
     })
     
     scene.on('message', async (ctx, next) => {
-      await ctx.scene.leave()
-      await next()
+      ctx.sendMessage('Происходит генерация кодов, либо дождитесь окончания, либо остановите генерацию!')
     })
     
     return scene

@@ -1,17 +1,18 @@
-import axios, { CancelTokenSource } from 'axios';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 import { Services } from '../../services';
 
 export default {
-  login: async function(clientId, appToken: string, proxy, agent, abort?:AbortController, services?: Services) {
+  login: async function(data: {clientId: string, appToken: string}, services: Services, options?: {proxy?:HttpsProxyAgent<string>, agent?:number, abort?:AbortController}) {
     try {
       const response = await services.api.request<{clientToken: string}>({
         url: '/promo/login-client',
         headers: {
-          'User-Agent': agent,
+          'User-Agent': options.agent,
         },
         method: 'POST',
-        data: { appToken, clientId, clientOrigin: 'deviceid' },
-        agent: proxy,
+        data: { clientId:data.clientId, appToken:data.appToken, clientOrigin: 'deviceid' },
+        ...(options.proxy ? {agent: options.proxy}: {}),
+        ...(options.abort ? {signal: options.abort.signal}: {}),
       })
       
       return response.data.clientToken;
@@ -20,21 +21,22 @@ export default {
     }
   },
   
-  registerEvent: async function(clientToken, promoId:string, proxy, agent, abort?:AbortController, services?: Services) {
+  registerEvent: async function(data: {clientToken: string, promoId:string}, services: Services, options?: {proxy?:HttpsProxyAgent<string>, agent?:number, abort?:AbortController}) {
     try {
       const response = await services.api.request<{hasCode: boolean}>({
         url: '/promo/register-event',
         headers: {
-          'Authorization': `Bearer ${clientToken}`,
-          'User-Agent': agent,
+          'Authorization': `Bearer ${data.clientToken}`,
+          'User-Agent': options.agent,
         },
         method: 'POST',
         data: {
-          promoId,
+          promoId:data.promoId,
           eventId: crypto.randomUUID(),
           eventOrigin: 'undefined'
         },
-        agent: proxy,
+        ...(options.proxy ? {agent: options.proxy}: {}),
+        ...(options.abort ? {signal: options.abort.signal}: {}),
       })
       
       return response.data.hasCode;
@@ -43,17 +45,18 @@ export default {
     }
   },
   
-  generateKey: async function(clientToken, promoId: string, proxy, agent, abort?:AbortController, services?: Services) {
+  generateKey: async function(data: {clientToken: string, promoId:string}, services: Services, options?: {proxy?:HttpsProxyAgent<string>, agent?:number, abort?:AbortController}) {
     try {
       const response = await services.api.request<{promoCode: string}>({
         url: '/promo/create-code',
         headers: {
-          'Authorization': `Bearer ${clientToken}`,
-          'User-Agent': agent,
+          'Authorization': `Bearer ${data.clientToken}`,
+          'User-Agent': options.agent,
         },
         method: 'POST',
-        data: { promoId },
-        agent: proxy,
+        data: { promoId: data.promoId},
+        ...(options.proxy ? {agent: options.proxy}: {}),
+        ...(options.abort ? {signal: options.abort.signal}: {}),
       })
       
       return response.data.promoCode;
