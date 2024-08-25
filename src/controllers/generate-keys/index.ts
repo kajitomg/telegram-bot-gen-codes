@@ -14,8 +14,6 @@ export default async function generateKeys (keyCount:number = 1, ctx:Context,cha
   const PENDING_AMOUNT_ITERATIONS = game.iterations
   const androidUserAgent = ua.random({ platform: 'Android' });
   
-  console.log(`generation for ${username} has been started ` + new Date())
-  
   async function generateKeyProcess() {
     const proxy = services.proxy.genProxyAgent();
     const clientId = generateClientId();
@@ -82,6 +80,5 @@ export default async function generateKeys (keyCount:number = 1, ctx:Context,cha
   
   
   const keys = await Promise.all(Array.from({ length: keyCount }, generateKeyProcess));
-  console.log(`generation for ${username} has been finish ` + new Date())
   return keys
 };

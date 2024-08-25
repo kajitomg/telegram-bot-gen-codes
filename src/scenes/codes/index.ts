@@ -140,7 +140,8 @@ export default {
         const message = await ctx.sendMessage(`Идет генерация кодов... ${progress}%`,markup);
         
         ctx.session.generate.pending = true
-        console.log(ctx.session.generate.game)
+        console.log(ctx.session.generate.game + ' ' + 'base')
+        console.log(`generation for ${author.username} has been started ` + new Date())
         let keys = []
         let codes = ''
         if( ctx.session.generate.game === gamesAll.id ) {
@@ -169,6 +170,7 @@ export default {
       } catch (error) {
         console.log(author.username + ' ' + error.response?.error_code + ' ' + error.response?.description)
       }
+      !controller.signal.aborted && console.log(`generation for ${author.username} has been finish ` + new Date())
       controller.abort('Request is finished')
       
       await ctx.scene.leave()
@@ -176,11 +178,18 @@ export default {
     })
     
     scene.action('select::generate::stop', async (ctx, next) => {
+      const author = ctx.from
       const controller = ctx.session.generate.abort
-      controller.abort('Request is canceled')
-      
-      await ctx.scene.leave()
-      await next()
+      try {
+        await controller.abort('Request is canceled')
+        ctx.session.generate = {}
+        console.log(`generation for ${author.username} has been canceled ` + new Date())
+        
+        await ctx.scene.leave()
+        await next()
+      } catch (e) {
+        console.log('Request is canceled')
+      }
     })
     
     
@@ -361,7 +370,8 @@ export default {
         const message = await ctx.sendMessage(`Идет генерация кодов\\.\\.\\. ${progress}%` + '\n' + '_\\(Может занять много времени\\)_',{reply_markup:markup.reply_markup,parse_mode:'MarkdownV2'});
         
         ctx.session.generate.pending = true
-        console.log(ctx.session.generate.game)
+        console.log(ctx.session.generate.game + ' ' + 'safe')
+        console.log(`generation for ${author.username} has been started ` + new Date())
         let keys = []
         let codes = ''
         if( ctx.session.generate.game === gamesAll.id ) {
@@ -391,6 +401,7 @@ export default {
       } catch (error) {
         console.log(author.username + ' ' + error.response?.error_code + ' ' + error.response?.description)
       }
+      !controller.signal.aborted && console.log(`generation for ${author.username} has been finish ` + new Date())
       controller.abort('Request is finished')
       
       await ctx.scene.leave()
@@ -398,11 +409,18 @@ export default {
     })
     
     scene.action('select::generate::stop', async (ctx, next) => {
+      const author = ctx.from
       const controller = ctx.session.generate.abort
-      controller.abort('Request is canceled')
-      
-      await ctx.scene.leave()
-      await next()
+      try {
+        await controller.abort('Request is canceled')
+        ctx.session.generate = {}
+        console.log(`generation for ${author.username} has been canceled ` + new Date())
+        
+        await ctx.scene.leave()
+        await next()
+      } catch (e) {
+        console.log('Request is canceled')
+      }
     })
     
     scene.on('message', async (ctx, next) => {

@@ -13,8 +13,6 @@ export default async function generateKeysSafe (keyCount:number = 1, ctx:Context
   const EVENTS_DELAY = game.delay
   const PENDING_AMOUNT_ITERATIONS = game.iterations
   
-  console.log(`generation for ${username} has been started ` + new Date())
-  
   async function generateKeyProcess() {
     let keys = []
 
@@ -99,6 +97,5 @@ export default async function generateKeysSafe (keyCount:number = 1, ctx:Context
   
   
   const keys = await generateKeyProcess();
-  console.log(`generation for ${username} has been finish ` + new Date())
   return keys
 };
