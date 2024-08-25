@@ -23,8 +23,8 @@ export default async function generateKeysSafe (keyCount:number = 1, ctx:Context
         const proxy = services.proxy.genProxyAgent()
         const iosUserAgent = ua.random({ platform: 'iPhone' });
         const clientId = generateClientId();
-        keys = [...keys, await genKey(clientId,iosUserAgent,proxy)]
         await sleep(300000 * getRandomDelay(),{signal: abort.signal});
+        keys = [...keys, await genKey(clientId,iosUserAgent,proxy)]
       } catch (e) {
         console.log(e)
       }

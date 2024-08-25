@@ -6,6 +6,9 @@ import handlers from './handlers';
 import scenes from './scenes';
 import { Services } from './services';
 import { Telegraf, Scenes, session, Composer } from 'telegraf';
+import { setMaxListeners } from 'events';
+
+setMaxListeners(100)
 
 export const services = new Services(config)
 
@@ -52,12 +55,12 @@ userBot.command('gencodes', async ctx => {
   return await ctx.scene.enter('gen-codes-select-game')
 })
 
-adminBot.command('broadcast', async ctx => {
-  return await ctx.scene.enter('broadcast-start')
-})
-
 userBot.command('gencodessafe', async ctx => {
   return await ctx.scene.enter('gen-codes-safe-check-subscribe')
+})
+
+adminBot.command('broadcast', async ctx => {
+  return await ctx.scene.enter('broadcast-start')
 })
 
 adminBot.command('projects', handlers.projects.selectProject)

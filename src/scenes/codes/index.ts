@@ -117,7 +117,7 @@ export default {
   GenCodesGenerateScene: function () {
     const scene = new BaseScene<CodesSceneContext>('gen-codes-generate')
     
-    scene.enter(async (ctx) => {
+    scene.enter(async (ctx, next) => {
       const chatId = ctx.chat.id
       const author = ctx.from
       
@@ -170,6 +170,9 @@ export default {
         console.log(author.username + ' ' + error.response?.error_code + ' ' + error.response?.description)
       }
       controller.abort('Request is finished')
+      
+      await ctx.scene.leave()
+      await next()
     })
     
     scene.action('select::generate::stop', async (ctx, next) => {
@@ -198,7 +201,6 @@ export default {
         await inspectUserWrapper(chatId, author)
         
         await ctx.sendMessage('*Вы выбрали Безопасную генерацию*',{parse_mode:'MarkdownV2'})
-        
         const subscribe = await checker(async (channel) => {
           const member = await ctx.telegram.getChatMember(channel, chatId)
           if (member.status != "member" && member.status != "administrator" && member.status != "creator"){
@@ -207,7 +209,6 @@ export default {
             return true;
           }
         }, ...reqChannelIDs)
-        
         if( subscribe ) {
           
           await ctx.scene.enter('gen-codes-safe-select-game')
@@ -231,7 +232,7 @@ export default {
     })
     
     scene.action('goto::generate::safe', async (ctx, next) => {
-      
+      console.log('da')
       await ctx.scene.enter('gen-codes-safe-select-game')
       
       await next()
@@ -391,6 +392,9 @@ export default {
         console.log(author.username + ' ' + error.response?.error_code + ' ' + error.response?.description)
       }
       controller.abort('Request is finished')
+      
+      await ctx.scene.leave()
+      await next()
     })
     
     scene.action('select::generate::stop', async (ctx, next) => {
@@ -406,5 +410,5 @@ export default {
     })
     
     return scene
-  }
+  },
 }
