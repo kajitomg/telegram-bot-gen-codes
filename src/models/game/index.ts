@@ -40,14 +40,6 @@ export const games:Game[] = [
     iterations: +process.env.AMOUNT_ITTERATIONS_CUBE,
   },
   {
-    id: Games.CLONE,
-    name: 'My Clone Army',
-    app_token: process.env.APP_TOKEN_CLONE,
-    promo_id: process.env.PROMO_ID_CLONE,
-    delay: +process.env.EVENTS_DELAY_CLONE,
-    iterations: +process.env.AMOUNT_ITTERATIONS_CLONE,
-  },
-  {
     id: Games.TRAIN,
     name: 'Train Miner',
     app_token: process.env.APP_TOKEN_TRAIN,

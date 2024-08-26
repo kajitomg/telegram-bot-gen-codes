@@ -2,6 +2,7 @@ import { Context, Markup, Scenes } from 'telegraf';
 import { BaseScene } from 'telegraf/scenes';
 import generateKeys from '../../controllers/generate-keys';
 import generateKeysSafe from '../../controllers/generate-keys/safe-generator';
+import SendPostToChat from '../../helpers/ads';
 import checker from '../../helpers/checker';
 import inspectUserWrapper from '../../helpers/inspect-user-wrapper';
 import send from '../../helpers/send';
@@ -147,7 +148,7 @@ export default {
         if( ctx.session.generate.game === gamesAll.id ) {
           keys = await Promise.all(Array.from({ length: games.length }, async (empty, i) => {
             try {
-              const keys = await generateKeys(ctx.session.generate.count,  ctx,chatId, message.message_id,  progress, author.username, games[i].id, controller, i === 2)
+              const keys = await generateKeys(ctx.session.generate.count,  ctx,chatId, message.message_id,  progress, author.username, games[i].id, controller, i === 5)
               
               return `*${games[i].name}*` + '\n\n`' + keys.filter(key => key).join('`\n\n`')?.toString() + '`'
             } catch (e) {
@@ -166,6 +167,7 @@ export default {
           `${codes}` +
           '*Подписывайся на наш канал \\- [Хомячий Табор](https://t.me/+lZLomxu29j81NGQy)*',
           {parse_mode: 'MarkdownV2'})
+        await SendPostToChat(chatId)
         
       } catch (error) {
         console.log(author.username + ' ' + error.response?.error_code + ' ' + error.response?.description)
@@ -377,7 +379,7 @@ export default {
         if( ctx.session.generate.game === gamesAll.id ) {
           keys = await Promise.all(Array.from({ length: games.length }, async (empty, i) => {
             try {
-              const keys = await generateKeysSafe(ctx.session.generate.count,  ctx,chatId, message.message_id,  progress, author.username, games[i].id, controller,i === 2)
+              const keys = await generateKeysSafe(ctx.session.generate.count,  ctx,chatId, message.message_id,  progress, author.username, games[i].id, controller,i === 5)
               
               return `*${games[i].name}*` + '\n\n`' + keys.filter(key => key).join('`\n\n`')?.toString() + '`'
             } catch (e) {
@@ -397,6 +399,7 @@ export default {
           `${codes}` +
           '*Подписывайся на наш канал \\- [Хомячий Табор](https://t.me/+lZLomxu29j81NGQy)*',
           {parse_mode: 'MarkdownV2'})
+        await SendPostToChat(chatId)
         
       } catch (error) {
         console.log(author.username + ' ' + error.response?.error_code + ' ' + error.response?.description)
