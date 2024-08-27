@@ -1,5 +1,5 @@
 require('dotenv').config()
-import { Context } from 'telegraf';
+import { Context, Markup } from 'telegraf';
 import { generateClientId } from '../../helpers/generate-client-id';
 import { getRandomDelay } from '../../helpers/get-random-delay';
 import { sleep } from '../../helpers/sleep';
@@ -41,7 +41,11 @@ export default async function generateKeys (keyCount:number = 1, ctx:Context,cha
         await sleep(+EVENTS_DELAY * getRandomDelay(),{signal: abort.signal});
         progress += (100 / PENDING_AMOUNT_ITERATIONS) / keyCount
         
-        edit && await ctx.telegram.editMessageText(chatId,messageId, undefined,`Идет генерация кодов... ${Math.round(progress >= 100 ? 100 : progress)}%`)
+        const markup = Markup.inlineKeyboard(
+          [0].map(() => Markup.button.callback('Остановить генерацию', `select::generate::stop`)),
+          { columns: 2},
+        )
+        edit && await ctx.telegram.editMessageText(chatId,messageId, undefined,`Идет генерация кодов\\.\\.\\. ${Math.round(progress >= 100 ? 100 : progress)}%`, { reply_markup: markup.reply_markup, parse_mode:'MarkdownV2' })
 
         const hasCode = await generateKeysReducers.registerEvent({
           clientToken,

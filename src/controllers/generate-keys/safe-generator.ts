@@ -58,7 +58,7 @@ export default async function generateKeysSafe (keyCount:number = 1, ctx:Context
           [0].map(() => Markup.button.callback('Остановить генерацию', `select::generate::stop`)),
           { columns: 2},
         )
-        edit && await ctx.telegram.editMessageText(chatId,messageId, undefined,`Идет генерация кодов\\.\\.\\. ${Math.round(progress >= 100 ? 100 : progress)}%` + '\n' + '_\\(Может занять много времени\\)_', { reply_markup: markup.reply_markup, parse_mode:'MarkdownV2' } )
+        edit && await ctx.telegram.editMessageText(chatId,messageId, undefined,`Идет генерация кодов\\.\\.\\. ${Math.round(progress >= 100 ? 100 : progress)}%` + '\n' + '_\\(может занять много времени\\)_', { reply_markup: markup.reply_markup, parse_mode:'MarkdownV2' } )
         
         const hasCode = await generateKeysReducers.registerEvent({
           clientToken,
