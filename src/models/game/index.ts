@@ -3,13 +3,13 @@ require('dotenv').config()
 export enum Games {
   BIKE = 'bike',
   CUBE = 'cube',
-  CLONE = 'clone',
   TRAIN = 'train',
   MERGE = 'merge',
   TWERK = 'twerk',
   POLY = 'poly',
   TRIM = 'trim',
   RACE = 'race',
+  CAFE = 'cafe',
   ALL = 'all',
 }
 
@@ -61,7 +61,7 @@ export const games:Game[] = [
     app_token: process.env.APP_TOKEN_TWERK,
     promo_id: process.env.PROMO_ID_TWERK,
     delay: +process.env.EVENTS_DELAY_TWERK,
-    iterations:+ process.env.AMOUNT_ITTERATIONS_TWERK,
+    iterations: +process.env.AMOUNT_ITTERATIONS_TWERK,
   },
   {
     id: Games.POLY,
@@ -69,7 +69,7 @@ export const games:Game[] = [
     app_token: process.env.APP_TOKEN_POLY,
     promo_id: process.env.PROMO_ID_POLY,
     delay: +process.env.EVENTS_DELAY_POLY,
-    iterations:+ process.env.AMOUNT_ITTERATIONS_POLY,
+    iterations: +process.env.AMOUNT_ITTERATIONS_POLY,
   },
   {
     id: Games.TRIM,
@@ -77,7 +77,7 @@ export const games:Game[] = [
     app_token: process.env.APP_TOKEN_TRIM,
     promo_id: process.env.PROMO_ID_TRIM,
     delay: +process.env.EVENTS_DELAY_TRIM,
-    iterations:+ process.env.AMOUNT_ITTERATIONS_TRIM,
+    iterations: +process.env.AMOUNT_ITTERATIONS_TRIM,
   },
   {
     id: Games.RACE,
@@ -85,8 +85,16 @@ export const games:Game[] = [
     app_token: process.env.APP_TOKEN_RACE,
     promo_id: process.env.PROMO_ID_RACE,
     delay: +process.env.EVENTS_DELAY_RACE,
-    iterations:+ process.env.AMOUNT_ITTERATIONS_RACE,
+    iterations: +process.env.AMOUNT_ITTERATIONS_RACE,
   },
+  {
+    id: Games.CAFE,
+    name: 'Cafe Dash',
+    app_token: process.env.APP_TOKEN_CAFE,
+    promo_id: process.env.PROMO_ID_CAFE,
+    delay: +process.env.EVENTS_DELAY_CAFE,
+    iterations: +process.env.AMOUNT_ITTERATIONS_CAFE,
+  }
 ]
 
 export const gamesAll: Game = {

@@ -49,13 +49,13 @@ const userBot = new Composer<Scenes.SceneContext>();
 
 const adminBot = new Composer<Scenes.SceneContext>();
 
-userBot.start(handlers.base.start)
+adminBot.start(handlers.base.start)
 
-userBot.command('gencodes', async ctx => {
+adminBot.command('gencodes', async ctx => {
   return await ctx.scene.enter('gen-codes-select-game')
 })
 
-userBot.command('gencodessafe', async ctx => {
+adminBot.command('gencodessafe', async ctx => {
   return await ctx.scene.enter('gen-codes-safe-check-subscribe')
 })
 
@@ -67,7 +67,7 @@ adminBot.command('projects', handlers.projects.selectProject)
 
 adminBot.action(/^select::project(?:::(\w+))$/, handlers.projects.getProjectServices);
 
-userBot.on('message', handlers.base.default)
+adminBot.on('message', handlers.base.default)
 
 bot.use(Composer.acl(authUsers,adminBot))
 
