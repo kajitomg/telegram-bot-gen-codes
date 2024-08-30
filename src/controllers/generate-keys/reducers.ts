@@ -17,6 +17,7 @@ export default {
       
       return response.data.clientToken;
     } catch (error) {
+      options?.abort?.signal?.throwIfAborted()
       return console.log(error)
     }
   },
@@ -41,6 +42,7 @@ export default {
       
       return response.data.hasCode;
     } catch (error) {
+      options?.abort?.signal?.throwIfAborted()
       return console.log(error)
     }
   },
@@ -61,6 +63,7 @@ export default {
       
       return response.data.promoCode;
     } catch (error) {
+      options?.abort?.signal?.throwIfAborted()
       return console.log(error)
     }
   }

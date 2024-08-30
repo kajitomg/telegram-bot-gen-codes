@@ -31,6 +31,7 @@ export default async function generateKeys (keyCount:number = 1, ctx:Context,cha
         abort
       });
     } catch (error) {
+      abort.signal.throwIfAborted()
       console.log(`Ошибка при авторизации для ${username}`)
       return null;
     }
@@ -60,6 +61,7 @@ export default async function generateKeys (keyCount:number = 1, ctx:Context,cha
           break;
         }
       } catch (error) {
+        abort.signal.throwIfAborted()
         console.log(username + ' ' + error.response?.error_code + ' ' + error.response?.description)
         return null;
       }

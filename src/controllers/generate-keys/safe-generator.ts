@@ -24,6 +24,7 @@ export default async function generateKeysSafe (keyCount:number = 1, ctx:Context
         await sleep(300000 * getRandomDelay(),{signal: abort.signal});
         keys = [...keys, await genKey(clientId,iosUserAgent,proxy)]
       } catch (e) {
+        abort.signal.throwIfAborted()
         console.log(e)
       }
     }
@@ -45,6 +46,7 @@ export default async function generateKeysSafe (keyCount:number = 1, ctx:Context
         abort
       });
     } catch (error) {
+      abort.signal.throwIfAborted()
       console.log(`Ошибка при авторизации для ${username}`)
       return null;
     }
@@ -73,6 +75,7 @@ export default async function generateKeysSafe (keyCount:number = 1, ctx:Context
           break;
         }
       } catch (error) {
+        abort.signal.throwIfAborted()
         console.log(username + ' ' + error.response?.error_code + ' ' + error.response?.description)
         return null;
       }
@@ -90,6 +93,7 @@ export default async function generateKeysSafe (keyCount:number = 1, ctx:Context
       
       return key;
     } catch (error) {
+      abort.signal.throwIfAborted()
       console.log(`Ошибка при генерации ключа для ${username}`)
       return null;
     }

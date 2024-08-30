@@ -1,14 +1,12 @@
 require('dotenv').config()
 
 export enum Games {
-  BIKE = 'bike',
   CUBE = 'cube',
   TRAIN = 'train',
   MERGE = 'merge',
   TWERK = 'twerk',
   POLY = 'poly',
   TRIM = 'trim',
-  RACE = 'race',
   CAFE = 'cafe',
   ZOO = 'zoo',
   GANGS = 'gangs',

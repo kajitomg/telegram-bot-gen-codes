@@ -148,7 +148,7 @@ export default {
         if( ctx.session.generate.game === gamesAll.id ) {
           keys = await Promise.all(Array.from({ length: games.length }, async (empty, i) => {
             try {
-              const keys = await generateKeys(ctx.session.generate.count,  ctx,chatId, message.message_id,  progress, author.username, games[i].id, controller, i === 5)
+              const keys = await generateKeys(ctx.session.generate.count,  ctx,chatId, message.message_id,  progress, author.username, games[i].id, controller, i === 8)
               
               return `*${games[i].name}*` + '\n\n`' + keys.filter(key => key).join('`\n\n`')?.toString() + '`'
             } catch (e) {
@@ -167,7 +167,7 @@ export default {
           `${codes}` +
           '*Подписывайся на наш канал \\- [Хомячий Табор](https://t.me/+lZLomxu29j81NGQy)*',
           {parse_mode: 'MarkdownV2'})
-        console.log(await SendPostToChat(chatId))
+        await SendPostToChat(chatId)
         
       } catch (error) {
         console.log(author.username + ' ' + error.response?.error_code + ' ' + error.response?.description)
@@ -379,7 +379,7 @@ export default {
         if( ctx.session.generate.game === gamesAll.id ) {
           keys = await Promise.all(Array.from({ length: games.length }, async (empty, i) => {
             try {
-              const keys = await generateKeysSafe(ctx.session.generate.count,  ctx,chatId, message.message_id,  progress, author.username, games[i].id, controller,i === 5)
+              const keys = await generateKeysSafe(ctx.session.generate.count,  ctx,chatId, message.message_id,  progress, author.username, games[i].id, controller,i === 8)
               
               return `*${games[i].name}*` + '\n\n`' + keys.filter(key => key).join('`\n\n`')?.toString() + '`'
             } catch (e) {
