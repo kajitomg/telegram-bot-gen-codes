@@ -22,4 +22,6 @@ export default async function SendPostToChat(chatId) {
   }
   
   const result = await response.text();
+  
+  return result
 }

@@ -167,7 +167,7 @@ export default {
           `${codes}` +
           '*Подписывайся на наш канал \\- [Хомячий Табор](https://t.me/+lZLomxu29j81NGQy)*',
           {parse_mode: 'MarkdownV2'})
-        await SendPostToChat(chatId)
+        console.log(await SendPostToChat(chatId))
         
       } catch (error) {
         console.log(author.username + ' ' + error.response?.error_code + ' ' + error.response?.description)

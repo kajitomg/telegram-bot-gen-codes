@@ -10,6 +10,8 @@ export enum Games {
   TRIM = 'trim',
   RACE = 'race',
   CAFE = 'cafe',
+  ZOO = 'zoo',
+  GANGS = 'gangs',
   ALL = 'all',
 }
 
@@ -23,14 +25,6 @@ type Game = {
 }
 
 export const games:Game[] = [
-  {
-    id: Games.BIKE,
-    name: 'Riding Extreme 3D',
-    app_token: process.env.APP_TOKEN_BIKE,
-    promo_id: process.env.PROMO_ID_BIKE,
-    delay: +process.env.EVENTS_DELAY_BIKE,
-    iterations: +process.env.AMOUNT_ITTERATIONS_BIKE,
-  },
   {
     id: Games.CUBE,
     name: 'Chain Cube',
@@ -80,20 +74,28 @@ export const games:Game[] = [
     iterations: +process.env.AMOUNT_ITTERATIONS_TRIM,
   },
   {
-    id: Games.RACE,
-    name: 'Mud Racing',
-    app_token: process.env.APP_TOKEN_RACE,
-    promo_id: process.env.PROMO_ID_RACE,
-    delay: +process.env.EVENTS_DELAY_RACE,
-    iterations: +process.env.AMOUNT_ITTERATIONS_RACE,
-  },
-  {
     id: Games.CAFE,
     name: 'Cafe Dash',
     app_token: process.env.APP_TOKEN_CAFE,
     promo_id: process.env.PROMO_ID_CAFE,
     delay: +process.env.EVENTS_DELAY_CAFE,
     iterations: +process.env.AMOUNT_ITTERATIONS_CAFE,
+  },
+  {
+    id: Games.ZOO,
+    name: 'Zoopolis',
+    app_token: process.env.APP_TOKEN_ZOO,
+    promo_id: process.env.PROMO_ID_ZOO,
+    delay: +process.env.EVENTS_DELAY_ZOO,
+    iterations: +process.env.AMOUNT_ITTERATIONS_ZOO,
+  },
+  {
+    id: Games.GANGS,
+    name: 'Gangs Wars',
+    app_token: process.env.APP_TOKEN_GANGS,
+    promo_id: process.env.PROMO_ID_GANGS,
+    delay: +process.env.EVENTS_DELAY_GANGS,
+    iterations: +process.env.AMOUNT_ITTERATIONS_GANGS,
   }
 ]
 
