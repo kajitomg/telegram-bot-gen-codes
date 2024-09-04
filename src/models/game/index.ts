@@ -7,9 +7,9 @@ export enum Games {
   TWERK = 'twerk',
   POLY = 'poly',
   TRIM = 'trim',
-  CAFE = 'cafe',
   ZOO = 'zoo',
-  GANGS = 'gangs',
+  TILE = 'tile',
+  FLUFF = 'fluff',
   ALL = 'all',
 }
 
@@ -72,14 +72,6 @@ export const games:Game[] = [
     iterations: +process.env.AMOUNT_ITTERATIONS_TRIM,
   },
   {
-    id: Games.CAFE,
-    name: 'Cafe Dash',
-    app_token: process.env.APP_TOKEN_CAFE,
-    promo_id: process.env.PROMO_ID_CAFE,
-    delay: +process.env.EVENTS_DELAY_CAFE,
-    iterations: +process.env.AMOUNT_ITTERATIONS_CAFE,
-  },
-  {
     id: Games.ZOO,
     name: 'Zoopolis',
     app_token: process.env.APP_TOKEN_ZOO,
@@ -88,13 +80,21 @@ export const games:Game[] = [
     iterations: +process.env.AMOUNT_ITTERATIONS_ZOO,
   },
   {
-    id: Games.GANGS,
-    name: 'Gangs Wars',
-    app_token: process.env.APP_TOKEN_GANGS,
-    promo_id: process.env.PROMO_ID_GANGS,
-    delay: +process.env.EVENTS_DELAY_GANGS,
-    iterations: +process.env.AMOUNT_ITTERATIONS_GANGS,
-  }
+    id: Games.TILE,
+    name: 'Tile Trio',
+    app_token: process.env.APP_TOKEN_TILE,
+    promo_id: process.env.PROMO_ID_TILE,
+    delay: +process.env.EVENTS_DELAY_TILE,
+    iterations: +process.env.AMOUNT_ITTERATIONS_TILE,
+  },
+  {
+    id: Games.FLUFF,
+    name: 'Fluff Crusade',
+    app_token: process.env.APP_TOKEN_FLUFF,
+    promo_id: process.env.PROMO_ID_FLUFF,
+    delay: +process.env.EVENTS_DELAY_FLUFF,
+    iterations: +process.env.AMOUNT_ITTERATIONS_FLUFF,
+  },
 ]
 
 export const gamesAll: Game = {
