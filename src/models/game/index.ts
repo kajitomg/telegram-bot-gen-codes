@@ -10,6 +10,7 @@ export enum Games {
   ZOO = 'zoo',
   TILE = 'tile',
   FLUFF = 'fluff',
+  STONE = 'stone',
   ALL = 'all',
 }
 
@@ -94,6 +95,14 @@ export const games:Game[] = [
     promo_id: process.env.PROMO_ID_FLUFF,
     delay: +process.env.EVENTS_DELAY_FLUFF,
     iterations: +process.env.AMOUNT_ITTERATIONS_FLUFF,
+  },
+  {
+    id: Games.STONE,
+    name: 'Stone Age',
+    app_token: process.env.APP_TOKEN_STONE,
+    promo_id: process.env.PROMO_ID_STONE,
+    delay: +process.env.EVENTS_DELAY_STONE,
+    iterations: +process.env.AMOUNT_ITTERATIONS_STONE,
   },
 ]
 
