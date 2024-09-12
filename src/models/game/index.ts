@@ -11,6 +11,7 @@ export enum Games {
   TILE = 'tile',
   FLUFF = 'fluff',
   STONE = 'stone',
+  BOUNC = 'bounc',
   ALL = 'all',
 }
 
@@ -103,6 +104,14 @@ export const games:Game[] = [
     promo_id: process.env.PROMO_ID_STONE,
     delay: +process.env.EVENTS_DELAY_STONE,
     iterations: +process.env.AMOUNT_ITTERATIONS_STONE,
+  },
+  {
+    id: Games.BOUNC,
+    name: 'Bouncemasters',
+    app_token: process.env.APP_TOKEN_BOUNC,
+    promo_id: process.env.PROMO_ID_BOUNC,
+    delay: +process.env.EVENTS_DELAY_BOUNC,
+    iterations: +process.env.AMOUNT_ITTERATIONS_BOUNC,
   },
 ]
 

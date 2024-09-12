@@ -406,7 +406,6 @@ export default {
       }
       !controller.signal.aborted && console.log(`generation for ${author.username} has been finish ` + new Date())
       controller.abort('Request is finished')
-      
       await ctx.scene.leave()
       await next()
     })

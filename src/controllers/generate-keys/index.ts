@@ -56,7 +56,6 @@ export default async function generateKeys (keyCount:number = 1, ctx:Context,cha
           agent: androidUserAgent,
           abort
         });
-        console.log(hasCode)
         if (hasCode) {
           break;
         }
