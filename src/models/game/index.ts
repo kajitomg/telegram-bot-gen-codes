@@ -14,6 +14,7 @@ export enum Games {
   BOUNC = 'bounc',
   HIDE = 'hide',
   COUNT = 'count',
+  PIN = 'pin',
   ALL = 'all',
 }
 
@@ -130,6 +131,14 @@ export const games:Game[] = [
     promo_id: process.env.PROMO_ID_COUNT,
     delay: +process.env.EVENTS_DELAY_COUNT,
     iterations: +process.env.AMOUNT_ITTERATIONS_COUNT,
+  },
+  {
+    id: Games.PIN,
+    name: 'Pin Out Master',
+    app_token: process.env.APP_TOKEN_PIN,
+    promo_id: process.env.PROMO_ID_PIN,
+    delay: +process.env.EVENTS_DELAY_PIN,
+    iterations: +process.env.AMOUNT_ITTERATIONS_PIN,
   },
 ]
 
