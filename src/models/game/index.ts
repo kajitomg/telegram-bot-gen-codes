@@ -12,6 +12,8 @@ export enum Games {
   FLUFF = 'fluff',
   STONE = 'stone',
   BOUNC = 'bounc',
+  HIDE = 'hide',
+  COUNT = 'count',
   ALL = 'all',
 }
 
@@ -112,6 +114,22 @@ export const games:Game[] = [
     promo_id: process.env.PROMO_ID_BOUNC,
     delay: +process.env.EVENTS_DELAY_BOUNC,
     iterations: +process.env.AMOUNT_ITTERATIONS_BOUNC,
+  },
+  {
+    id: Games.HIDE,
+    name: 'Hide Ball',
+    app_token: process.env.APP_TOKEN_HIDE,
+    promo_id: process.env.PROMO_ID_HIDE,
+    delay: +process.env.EVENTS_DELAY_HIDE,
+    iterations: +process.env.AMOUNT_ITTERATIONS_HIDE,
+  },
+  {
+    id: Games.COUNT,
+    name: 'Count Masters',
+    app_token: process.env.APP_TOKEN_COUNT,
+    promo_id: process.env.PROMO_ID_COUNT,
+    delay: +process.env.EVENTS_DELAY_COUNT,
+    iterations: +process.env.AMOUNT_ITTERATIONS_COUNT,
   },
 ]
 

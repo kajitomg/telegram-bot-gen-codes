@@ -148,7 +148,7 @@ export default {
         if( ctx.session.generate.game === gamesAll.id ) {
           keys = await Promise.all(Array.from({ length: games.length }, async (empty, i) => {
             try {
-              const keys = await generateKeys(ctx.session.generate.count,  ctx,chatId, message.message_id,  progress, author.username, games[i].id, controller, i === 4)
+              const keys = await generateKeys(ctx.session.generate.count,  ctx,chatId, message.message_id,  progress, author.username, games[i].id, controller, i === 11)
               
               return `*${games[i].name}*` + '\n\n`' + keys.filter(key => key).join('`\n\n`')?.toString() + '`'
             } catch (e) {
@@ -379,7 +379,7 @@ export default {
         if( ctx.session.generate.game === gamesAll.id ) {
           keys = await Promise.all(Array.from({ length: games.length }, async (empty, i) => {
             try {
-              const keys = await generateKeysSafe(ctx.session.generate.count,  ctx,chatId, message.message_id,  progress, author.username, games[i].id, controller,i === 4)
+              const keys = await generateKeysSafe(ctx.session.generate.count,  ctx,chatId, message.message_id,  progress, author.username, games[i].id, controller,i === 11)
               
               return `*${games[i].name}*` + '\n\n`' + keys.filter(key => key).join('`\n\n`')?.toString() + '`'
             } catch (e) {
