@@ -17,6 +17,7 @@ export enum Games {
   PIN = 'pin',
   FRONTIER = 'frontier',
   AMONG = 'among',
+  FACTORY = 'factory',
   ALL = 'all',
 }
 
@@ -158,7 +159,24 @@ export const games:Game[] = [
     delay: +process.env.EVENTS_DELAY_AMONG,
     iterations: +process.env.AMOUNT_ITTERATIONS_AMONG,
   },
+  {
+    id: Games.AMONG,
+    name: 'Among Water',
+    app_token: process.env.APP_TOKEN_AMONG,
+    promo_id: process.env.PROMO_ID_AMONG,
+    delay: +process.env.EVENTS_DELAY_AMONG,
+    iterations: +process.env.AMOUNT_ITTERATIONS_AMONG,
+  },
+  {
+    id: Games.FACTORY,
+    name: 'Factory World',
+    app_token: process.env.APP_TOKEN_FACTORY,
+    promo_id: process.env.PROMO_ID_FACTORY,
+    delay: +process.env.EVENTS_DELAY_FACTORY,
+    iterations: +process.env.AMOUNT_ITTERATIONS_FACTORY,
+  },
 ]
+
 export const gamesAll: Game = {
   id: Games.ALL,
   name: 'Все игры',
