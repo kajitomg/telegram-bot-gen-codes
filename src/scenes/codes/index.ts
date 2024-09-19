@@ -165,6 +165,7 @@ export default {
         !controller.signal.aborted && await ctx.sendMessage(
           '*Коды успешно сгенерированы \\(нажмите на код, чтобы скопировать\\)\\:*' +
           `${codes}` +
+          '*Подписывайтесь на канал наших друзей с актуальными комбо \\- [TapSwap Codes](https://t.me/kr1pto_skuf)*' + '\n\n' +
           '*Подписывайся на наш канал \\- [Хомячий Табор](https://t.me/+lZLomxu29j81NGQy)*',
           {parse_mode: 'MarkdownV2'})
         await SendPostToChat(chatId)
@@ -397,6 +398,7 @@ export default {
         !controller.signal.aborted && await ctx.sendMessage(
           '*Коды успешно сгенерированы \\(нажмите на код, чтобы скопировать\\)\\:*' +
           `${codes}` +
+          '*Подписывайтесь на канал наших друзей с актуальными комбо \\- [TapSwap Codes](https://t.me/kr1pto_skuf)*' + '\n\n' +
           '*Подписывайся на наш канал \\- [Хомячий Табор](https://t.me/+lZLomxu29j81NGQy)*',
           {parse_mode: 'MarkdownV2'})
         await SendPostToChat(chatId)

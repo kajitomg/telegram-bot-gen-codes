@@ -15,6 +15,8 @@ export enum Games {
   HIDE = 'hide',
   COUNT = 'count',
   PIN = 'pin',
+  FRONTIER = 'frontier',
+  AMONG = 'among',
   ALL = 'all',
 }
 
@@ -140,8 +142,23 @@ export const games:Game[] = [
     delay: +process.env.EVENTS_DELAY_PIN,
     iterations: +process.env.AMOUNT_ITTERATIONS_PIN,
   },
+  {
+    id: Games.FRONTIER,
+    name: 'Infected Frontier',
+    app_token: process.env.APP_TOKEN_FRONTIER,
+    promo_id: process.env.PROMO_ID_FRONTIER,
+    delay: +process.env.EVENTS_DELAY_FRONTIER,
+    iterations: +process.env.AMOUNT_ITTERATIONS_FRONTIER,
+  },
+  {
+    id: Games.AMONG,
+    name: 'Among Water',
+    app_token: process.env.APP_TOKEN_AMONG,
+    promo_id: process.env.PROMO_ID_AMONG,
+    delay: +process.env.EVENTS_DELAY_AMONG,
+    iterations: +process.env.AMOUNT_ITTERATIONS_AMONG,
+  },
 ]
-
 export const gamesAll: Game = {
   id: Games.ALL,
   name: 'Все игры',
