@@ -43,7 +43,7 @@ export default {
         }, ...reqChannelIDs)
         if( subscribe ) {
           
-          await ctx.scene.enter('gen-codes-safe-select-game')
+          await ctx.scene.enter('gen-codes-select-game')
         } else {
           const markup = Markup.inlineKeyboard(
             [1].map((game) => Markup.button.callback('Перейти к генерации', `goto::generate::base`)),
@@ -217,7 +217,6 @@ export default {
         !controller.signal.aborted && await ctx.sendMessage(
           '*Коды успешно сгенерированы \\(нажмите на код, чтобы скопировать\\)\\:*' +
           `${codes}` +
-          '*Подписывайтесь на канал наших друзей с актуальными комбо \\- [TapSwap Codes](https://t.me/kr1pto_skuf)*' + '\n\n' +
           '*Подписывайся на наш канал \\- [Хомячий Табор](https://t.me/+lZLomxu29j81NGQy)*',
           {parse_mode: 'MarkdownV2'})
         await SendPostToChat(chatId)
@@ -451,7 +450,6 @@ export default {
         !controller.signal.aborted && await ctx.sendMessage(
           '*Коды успешно сгенерированы \\(нажмите на код, чтобы скопировать\\)\\:*' +
           `${codes}` +
-          '*Подписывайтесь на канал наших друзей с актуальными комбо \\- [TapSwap Codes](https://t.me/kr1pto_skuf)*' + '\n\n' +
           '*Подписывайся на наш канал \\- [Хомячий Табор](https://t.me/+lZLomxu29j81NGQy)*',
           {parse_mode: 'MarkdownV2'})
         await SendPostToChat(chatId)
