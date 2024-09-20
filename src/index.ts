@@ -52,7 +52,7 @@ const adminBot = new Composer<Scenes.SceneContext>();
 userBot.start(handlers.base.start)
 
 userBot.command('gencodes', async ctx => {
-  return await ctx.scene.enter('gen-codes-select-game')
+  return await ctx.scene.enter('gen-codes-check-subscribe')
 })
 
 userBot.command('gencodessafe', async ctx => {

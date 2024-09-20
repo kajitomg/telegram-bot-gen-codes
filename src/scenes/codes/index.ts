@@ -22,8 +22,8 @@ const reqChannelIDs = ['-1002216264610', '-1002206346301']
 type CodesSceneContext = Context & Scenes.SceneContext & { session: { generate: SessionGenerateData } };
 
 export default {
-  GenCodesSelectGameScene: function () {
-    const scene = new BaseScene<CodesSceneContext>('gen-codes-select-game')
+  GenCodesBaseCheckSubscribeScene: function () {
+    const scene = new BaseScene<CodesSceneContext>('gen-codes-check-subscribe')
     
     scene.enter(async (ctx, next) => {
       const author = ctx.from
@@ -33,6 +33,58 @@ export default {
         await inspectUserWrapper(chatId, author)
         
         await ctx.sendMessage('*Вы выбрали Обычную генерацию*',{parse_mode:'MarkdownV2'})
+        const subscribe = await checker(async (channel) => {
+          const member = await ctx.telegram.getChatMember(channel, chatId)
+          if (member.status != "member" && member.status != "administrator" && member.status != "creator"){
+            return false;
+          } else {
+            return true;
+          }
+        }, ...reqChannelIDs)
+        if( subscribe ) {
+          
+          await ctx.scene.enter('gen-codes-safe-select-game')
+        } else {
+          const markup = Markup.inlineKeyboard(
+            [1].map((game) => Markup.button.callback('Перейти к генерации', `goto::generate::base`)),
+            { columns: 2 },
+          )
+          await send(ctx,
+            '*Подпишись на каналы\\:*' +
+            `\n\n` +
+            '*Наш канал \\- [Хомячий Табор](https://t.me/+lZLomxu29j81NGQy)*' +
+            `\n\n` +
+            '*Блог создателя \\- [USKV](https://t.me/+Tx7AT4VBvMhlMGE6)*' +
+            `\n\n` +
+            '*Наш новый бот для получения кодов для видео \\- [Video Codes](https://t.me/videocodes_bot)*',
+            {parse_mode: 'MarkdownV2', reply_markup:markup.reply_markup})
+        }
+      } catch (error) {
+        console.log(author.username + ' ' + error.response?.body?.error_code + ' ' + error.response?.body?.description)
+      }
+      await next()
+    })
+    
+    scene.action('goto::generate::base', async (ctx, next) => {
+      await ctx.scene.enter('gen-codes-select-game')
+      
+      await next()
+    })
+    
+    scene.on('message', async (ctx, next) => {
+      await ctx.scene.leave()
+      await next()
+    })
+    
+    return scene
+  },
+  GenCodesSelectGameScene: function () {
+    const scene = new BaseScene<CodesSceneContext>('gen-codes-select-game')
+    
+    scene.enter(async (ctx, next) => {
+      const author = ctx.from
+      
+      try {
         
         const markup = Markup.inlineKeyboard(
           [
@@ -234,7 +286,9 @@ export default {
             `\n\n` +
             '*Наш канал \\- [Хомячий Табор](https://t.me/+lZLomxu29j81NGQy)*' +
             `\n\n` +
-            '*Блог создателя \\- [USKV](https://t.me/+Tx7AT4VBvMhlMGE6)*',
+            '*Блог создателя \\- [USKV](https://t.me/+Tx7AT4VBvMhlMGE6)*' +
+            `\n\n` +
+            '*Наш новый бот для получения кодов для видео \\- [Video Codes](https://t.me/videocodes_bot)*',
             {parse_mode: 'MarkdownV2', reply_markup:markup.reply_markup})
         }
       } catch (error) {
@@ -244,7 +298,6 @@ export default {
     })
     
     scene.action('goto::generate::safe', async (ctx, next) => {
-      console.log('da')
       await ctx.scene.enter('gen-codes-safe-select-game')
       
       await next()

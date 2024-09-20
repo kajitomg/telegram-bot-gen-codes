@@ -160,14 +160,6 @@ export const games:Game[] = [
     iterations: +process.env.AMOUNT_ITTERATIONS_AMONG,
   },
   {
-    id: Games.AMONG,
-    name: 'Among Water',
-    app_token: process.env.APP_TOKEN_AMONG,
-    promo_id: process.env.PROMO_ID_AMONG,
-    delay: +process.env.EVENTS_DELAY_AMONG,
-    iterations: +process.env.AMOUNT_ITTERATIONS_AMONG,
-  },
-  {
     id: Games.FACTORY,
     name: 'Factory World',
     app_token: process.env.APP_TOKEN_FACTORY,
