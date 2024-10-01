@@ -18,6 +18,8 @@ export enum Games {
   FRONTIER = 'frontier',
   AMONG = 'among',
   FACTORY = 'factory',
+  SNAKE = 'snake',
+  COOKING = 'cooking',
   ALL = 'all',
 }
 
@@ -86,14 +88,6 @@ export const games:Game[] = [
     promo_id: process.env.PROMO_ID_ZOO,
     delay: +process.env.EVENTS_DELAY_ZOO,
     iterations: +process.env.AMOUNT_ITTERATIONS_ZOO,
-  },
-  {
-    id: Games.TILE,
-    name: 'Tile Trio',
-    app_token: process.env.APP_TOKEN_TILE,
-    promo_id: process.env.PROMO_ID_TILE,
-    delay: +process.env.EVENTS_DELAY_TILE,
-    iterations: +process.env.AMOUNT_ITTERATIONS_TILE,
   },
   {
     id: Games.FLUFF,
@@ -166,6 +160,22 @@ export const games:Game[] = [
     promo_id: process.env.PROMO_ID_FACTORY,
     delay: +process.env.EVENTS_DELAY_FACTORY,
     iterations: +process.env.AMOUNT_ITTERATIONS_FACTORY,
+  },
+  {
+    id: Games.COOKING,
+    name: 'Cooking Stories',
+    app_token: process.env.APP_TOKEN_COOKING,
+    promo_id: process.env.PROMO_ID_COOKING,
+    delay: +process.env.EVENTS_DELAY_COOKING,
+    iterations: +process.env.AMOUNT_ITTERATIONS_COOKING,
+  },
+  {
+    id: Games.SNAKE,
+    name: 'Snake Run',
+    app_token: process.env.APP_TOKEN_SNAKE,
+    promo_id: process.env.PROMO_ID_SNAKE,
+    delay: +process.env.EVENTS_DELAY_SNAKE,
+    iterations: +process.env.AMOUNT_ITTERATIONS_SNAKE,
   },
 ]
 
