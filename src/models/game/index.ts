@@ -20,6 +20,7 @@ export enum Games {
   FACTORY = 'factory',
   SNAKE = 'snake',
   COOKING = 'cooking',
+  TOWER = 'tower',
   ALL = 'all',
 }
 
@@ -58,14 +59,6 @@ export const games:Game[] = [
     iterations: +process.env.AMOUNT_ITTERATIONS_MERGE,
   },
   {
-    id: Games.TWERK,
-    name: 'Twerk Race 3D',
-    app_token: process.env.APP_TOKEN_TWERK,
-    promo_id: process.env.PROMO_ID_TWERK,
-    delay: +process.env.EVENTS_DELAY_TWERK,
-    iterations: +process.env.AMOUNT_ITTERATIONS_TWERK,
-  },
-  {
     id: Games.POLY,
     name: 'Polysphere',
     app_token: process.env.APP_TOKEN_POLY,
@@ -74,28 +67,12 @@ export const games:Game[] = [
     iterations: +process.env.AMOUNT_ITTERATIONS_POLY,
   },
   {
-    id: Games.TRIM,
-    name: 'Mow and Trim',
-    app_token: process.env.APP_TOKEN_TRIM,
-    promo_id: process.env.PROMO_ID_TRIM,
-    delay: +process.env.EVENTS_DELAY_TRIM,
-    iterations: +process.env.AMOUNT_ITTERATIONS_TRIM,
-  },
-  {
     id: Games.ZOO,
     name: 'Zoopolis',
     app_token: process.env.APP_TOKEN_ZOO,
     promo_id: process.env.PROMO_ID_ZOO,
     delay: +process.env.EVENTS_DELAY_ZOO,
     iterations: +process.env.AMOUNT_ITTERATIONS_ZOO,
-  },
-  {
-    id: Games.FLUFF,
-    name: 'Fluff Crusade',
-    app_token: process.env.APP_TOKEN_FLUFF,
-    promo_id: process.env.PROMO_ID_FLUFF,
-    delay: +process.env.EVENTS_DELAY_FLUFF,
-    iterations: +process.env.AMOUNT_ITTERATIONS_FLUFF,
   },
   {
     id: Games.STONE,
@@ -130,28 +107,12 @@ export const games:Game[] = [
     iterations: +process.env.AMOUNT_ITTERATIONS_COUNT,
   },
   {
-    id: Games.PIN,
-    name: 'Pin Out Master',
-    app_token: process.env.APP_TOKEN_PIN,
-    promo_id: process.env.PROMO_ID_PIN,
-    delay: +process.env.EVENTS_DELAY_PIN,
-    iterations: +process.env.AMOUNT_ITTERATIONS_PIN,
-  },
-  {
     id: Games.FRONTIER,
     name: 'Infected Frontier',
     app_token: process.env.APP_TOKEN_FRONTIER,
     promo_id: process.env.PROMO_ID_FRONTIER,
     delay: +process.env.EVENTS_DELAY_FRONTIER,
     iterations: +process.env.AMOUNT_ITTERATIONS_FRONTIER,
-  },
-  {
-    id: Games.AMONG,
-    name: 'Among Water',
-    app_token: process.env.APP_TOKEN_AMONG,
-    promo_id: process.env.PROMO_ID_AMONG,
-    delay: +process.env.EVENTS_DELAY_AMONG,
-    iterations: +process.env.AMOUNT_ITTERATIONS_AMONG,
   },
   {
     id: Games.FACTORY,
@@ -176,6 +137,14 @@ export const games:Game[] = [
     promo_id: process.env.PROMO_ID_SNAKE,
     delay: +process.env.EVENTS_DELAY_SNAKE,
     iterations: +process.env.AMOUNT_ITTERATIONS_SNAKE,
+  },
+  {
+    id: Games.TOWER,
+    name: 'Tower Defence',
+    app_token: process.env.APP_TOKEN_TOWER,
+    promo_id: process.env.PROMO_ID_TOWER,
+    delay: +process.env.EVENTS_DELAY_TOWER,
+    iterations: +process.env.AMOUNT_ITTERATIONS_TOWER,
   },
 ]
 
